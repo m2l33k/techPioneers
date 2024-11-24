@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Index{% endblock %}
+
+{% block body %}
+<div class="index-page">
+    <h1 class="text-center">User Index</h1>
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Phone Number</th>
+                <th>Role</th>
+                <th>Date of Birth</th>
+                <th>Photo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.idUser }}</td>
+                <td>{{ user.nomUser }}</td>
+                <td>{{ user.prenomUser }}</td>
+                <td>{{ user.emailUser }}</td>
+                <td>{{ user.motdepasseUser }}</td>
+                <td>{{ user.numtelephoneUser }}</td>
+                <td>{{ user.roleUser.value }}</td>
+                <td>{{ user.datenaissanceUser ? user.datenaissanceUser|date('Y-m-d') : '' }}</td>
+                <td>{{ user.photoUser }}</td>
+                <td class="action-buttons">
+                    <a href="{{ path('app_user_show', {'id': user.idUser}) }}" class="btn btn-outline-info btn-sm">Show</a>
+                    <a href="{{ path('app_user_edit', {'id': user.idUser}) }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10" class="text-center">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_user_new') }}" class="btn btn-success">Create New User</a>
+    </div>
+</div>
+{% endblock %}

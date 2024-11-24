@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chatbot Details{% endblock %}
+
+{% block body %}
+<div class="show-page">
+    <h1 class="text-center">Chatbot Details</h1>
+
+    <div class="details-container">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td>{{ chatbot.idChatbot }}</td>
+                </tr>
+                <tr>
+                    <th>Creation Date</th>
+                    <td>{{ chatbot.datecreationChatbot ? chatbot.datecreationChatbot|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Content</th>
+                    <td>{{ chatbot.contenuChatbot }}</td>
+                </tr>
+                <tr>
+                    <th>Author</th>
+                    <td>{{ chatbot.autheurChatbot }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="action-buttons text-center">
+        <a href="{{ path('app_chatbot_index') }}" class="btn btn-secondary">Back to List</a>
+        <a href="{{ path('app_chatbot_edit', {'idChatbot': chatbot.idChatbot}) }}" class="btn btn-primary">Edit</a>
+        {{ include('chatbot/_delete_form.html.twig', {'button_class': 'btn btn-danger'}) }}
+    </div>
+</div>
+{% endblock %}
