@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Chatbot{% endblock %}
+
+{% block body %}
+    <h1>Create new Chatbot</h1>
+
+    {{ include('chatbot/_form.html.twig') }}
+
+    <a href="{{ path('app_chatbot_index') }}">back to list</a>
+{% endblock %}

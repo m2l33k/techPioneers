@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum index{% endblock %}
+
+{% block body %}
+    <h1>Forum index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id_Forum</th>
+                <th>Titre_Forum</th>
+                <th>Description_Forum</th>
+                <th>Createur_Forum</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for forum in forums %}
+            <tr>
+                <td>{{ forum.Id_Forum }}</td>
+                <td>{{ forum.TitreForum }}</td>
+                <td>{{ forum.DescriptionForum }}</td>
+                <td>{{ forum.CreateurForum }}</td>
+                <td>
+                    <a href="{{ path('app_forum_show', {'Id_Forum': forum.Id_Forum}) }}">show</a>
+                    <a href="{{ path('app_forum_edit', {'Id_Forum': forum.Id_Forum}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_forum_new') }}">Create new</a>
+{% endblock %}

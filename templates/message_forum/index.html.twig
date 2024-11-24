@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MessageForum index{% endblock %}
+
+{% block body %}
+    <h1>MessageForum index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id_MessageForum</th>
+                <th>Createur_MessageForum</th>
+                <th>Id_Forum</th>
+                <th>Conetenu_Id_MessageForum</th>
+                <th>DateCreation_Id_MessageForum</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for message_forum in message_forums %}
+            <tr>
+                <td>{{ message_forum.Id_MessageForum }}</td>
+                <td>{{ message_forum.CreateurMessageForum }}</td>
+                <td>{{ message_forum.IdForum }}</td>
+                <td>{{ message_forum.ConetenuIdMessageForum }}</td>
+                <td>{{ message_forum.DateCreationIdMessageForum ? message_forum.DateCreationIdMessageForum|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_message_forum_show', {'Id_MessageForum': message_forum.Id_MessageForum}) }}">show</a>
+                    <a href="{{ path('app_message_forum_edit', {'Id_MessageForum': message_forum.Id_MessageForum}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_message_forum_new') }}">Create new</a>
+{% endblock %}
