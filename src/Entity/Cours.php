@@ -10,8 +10,9 @@ class Cours
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "Id_Cours")] // Ensure the name is explicitly defined
+    #[ORM\Column(name: "Id_Cours", type: "integer")]
     private int $Id_Cours;
+    
 
     #[ORM\Column(length: 255)]
     private string $Titre_Cours;
@@ -80,5 +81,10 @@ class Cours
     {
         $this->Date_creation_Cours = $Date_creation_Cours;
         return $this;
+    }
+
+    public function __toString(): string
+    {
+    return $this->Titre_Cours; 
     }
 }

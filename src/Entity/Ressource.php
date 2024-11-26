@@ -38,7 +38,7 @@ class Ressource
     #[ORM\JoinColumn(name: "Id_Cours", referencedColumnName: "Id_Cours", nullable: false)]
     private Cours $Id_Cours;
 
-    // Getters and Setters
+    
 
     public function getIdRessource(): int
     {
@@ -116,15 +116,19 @@ class Ressource
         $this->DateCreation_Ressource = $DateCreation_Ressource;
         return $this;
     }
-
+    public function getId(): int
+    {
+        return $this->getIdCours();
+    }
     public function getIdCours(): Cours
     {
         return $this->Id_Cours;
     }
-
+    
     public function setIdCours(Cours $Id_Cours): static
     {
         $this->Id_Cours = $Id_Cours;
         return $this;
     }
+    
 }
