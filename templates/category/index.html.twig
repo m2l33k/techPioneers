@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category Index{% endblock %}
+
+{% block body %}
+<div class="index-page">
+    <h1 class="text-center">Category Index</h1>
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Event ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.idCategory }}</td>
+                <td>{{ category.nomCategory }}</td>
+                <td>
+                    {% if category.evenement is not null %}
+                        {{ category.evenement.idEvenement }}
+                    {% else %}
+                        No associated event
+                    {% endif %}
+                </td>
+                <td class="action-buttons">
+                    <a href="{{ path('app_category_show', {'idCategory': category.idCategory}) }}" class="btn btn-outline-info btn-sm">Show</a>
+                    <a href="{{ path('app_category_edit', {'idCategory': category.idCategory}) }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="text-center">No categories found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_category_new') }}" class="btn btn-success">Create New Category</a>
+    </div>
+</div>
+{% endblock %}
