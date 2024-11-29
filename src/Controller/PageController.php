@@ -49,6 +49,18 @@ class PageController extends AbstractController
         return $this->render('page/Courses.html.twig',);
     }
 
+    #[Route('/Evenement', name: 'app_Evenement')]
+    public function Evenement(): Response
+    {
+        return $this->render('page/Evenement.html.twig',);
+    }
+
+    #[Route('/Root', name: 'app_Root')]
+    public function root(): Response
+    {
+        return $this->render('page/Dashboard.html.twig',);
+    }
+
 
 
 }

@@ -4,7 +4,7 @@ namespace App\Enum;
 
 enum TypeRessourceEnum: string
 {
-    case DOCUMENT = 'document';
+    case DOCUMENT = 'DOCUMENT';
     case VIDEO = 'video';
     case AUDIO = 'audio';
 }

@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Check Email{% endblock %}
+
+{% block body %}
+<h1>Check Your Email</h1>
+<p>If an account with the provided email exists, a reset link has been sent. Please check your inbox.</p>
+<a href="{{ path('app_login') }}" class="btn btn-secondary">Back to Login</a>
+{% endblock %}
