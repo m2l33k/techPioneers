@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_message_forum_delete', {'IdMessageForum': message_forum.idMessageForum}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message_forum.idMessageForum) }}">
+    <button class="btn">Delete</button>
+</form>

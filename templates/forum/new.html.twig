@@ -1,0 +1,50 @@
+{# forum/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Forum{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4 text-primary">Create New Forum</h1>
+
+    <div class="card shadow-lg rounded-lg border-0">
+        <div class="card-body">
+            <form method="post">
+                {{ form_start(form) }}
+
+                <!-- Forum Title -->
+                <div class="mb-4">
+                    <label for="titreForum" class="form-label text-dark fw-semibold">Forum Title</label>
+                    {{ form_widget(form.titreForum, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                    {{ form_errors(form.titreForum) }}
+                </div>
+
+                <!-- Forum Description -->
+                <div class="mb-4">
+                    <label for="descriptionForum" class="form-label text-dark fw-semibold">Forum Description</label>
+                    {{ form_widget(form.descriptionForum, {'attr': {'class': 'form-control form-control-lg', 'rows': 4}}) }}
+                    {{ form_errors(form.descriptionForum) }}
+                </div>
+
+                <!-- Forum Creator -->
+                <div class="mb-4">
+                    <label for="createurForum" class="form-label text-dark fw-semibold">Forum Creator</label>
+                    {{ form_widget(form.createurForum, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                    {{ form_errors(form.createurForum) }}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-4 py-2">Create Forum</button>
+                </div>
+
+                {{ form_end(form) }}
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_forum_index') }}" class="btn btn-outline-dark btn-lg">Back to Forum List</a>
+    </div>
+</div>
+{% endblock %}

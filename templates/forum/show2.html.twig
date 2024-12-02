@@ -1,0 +1,212 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conversation{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="forum-header text-center mb-4">
+        <h1 class="forum-title">
+            <i class="fas fa-comments"></i> {{ forum.titreForum }}
+        </h1>
+        <p class="forum-description">
+            <i class="fas fa-info-circle"></i> {{ forum.descriptionForum }}
+        </p>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="chat-section rounded shadow-lg">
+        <div class="chat-box">
+            {% if forum.messages is empty %}
+                <div class="no-messages text-muted text-center">No messages yet.</div>
+            {% else %}
+                {% for message in forum.messages %}
+                    <div class="message-item {% if message.createurMessageForum == app.user %} my-message {% else %} other-message {% endif %}">
+                        <div class="message-avatar">
+                            <img src="{{ asset(message.createurMessageForum.photoUser ? message.createurMessageForum.photoUser : 'img/userIcon.png') }}" 
+                                 alt="{{ message.createurMessageForum.nomUser }}" class="avatar">
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>{{ message.createurMessageForum.nomUser }} {{ message.createurMessageForum.prenomUser }}</strong>
+                                <span class="message-time">
+                                    <i class="fas fa-clock"></i> {{ message.dateCreationIdMessageForum|date('m/d/Y, H:i:s') }}
+                                </span>
+                            </div>
+                            <div class="message-text">{{ message.conetenuIdMessageForum|raw }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Message Input -->
+        <form action="{{ path('app_message_forum_new', {'idForum': forum.idForum}) }}" method="post" enctype="multipart/form-data" class="message-form">
+            <textarea id="messageContent" name="messageContent" class="form-control message-input" placeholder="Type your message..." required></textarea>
+            <div class="input-group mt-3">
+                <!-- Updated File Input -->
+                <label for="fileInput" class="btn btn-outline-primary file-label">
+                    <i class="fas fa-paperclip"></i> Choose Files
+                </label>
+                <input type="file" name="messageFile[]" class="form-control file-input" id="fileInput" multiple style="display:none;">
+                <button type="submit" class="btn btn-send">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_forum_front_index') }}" class="btn btn-outline-secondary back-button">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .chat-section {
+        background: #ffffff;
+        border: 2px solid #dee2e6;
+        border-radius: 16px;
+        padding: 20px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-box {
+        padding: 20px;
+        padding-bottom: 150px;
+        background: #f5f5f5;
+        border: 2px solid #ced4da;
+        border-radius: 12px;
+    }
+
+    .message-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 8px;
+    }
+
+    .message-avatar {
+        margin-right: 10px;
+        width: 40px;
+        height: 40px;
+        border: 2px solid #007bff;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .avatar {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .message-content {
+        background: #e9ecef;
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        max-width: 55%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .my-message .message-content {
+        background: #007bff;
+        color: #fff;
+        border: 1px solid #0056b3;
+    }
+
+    .message-header {
+        font-weight: bold;
+        font-size: 0.9rem;
+        color: #333;
+        margin-bottom: 6px;
+    }
+
+    .message-time {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-left: 6px;
+    }
+
+    .message-text {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    .message-item:hover {
+        background-color: #f1f3f5; /* Muted grey background on hover */
+        transform: scale(1.02);
+    }
+    .message-input {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .file-input {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 8px;
+    }
+
+    .btn-send {
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+
+    .back-button {
+        border-radius: 8px;
+        padding: 8px 16px;
+    }
+
+    /* Custom Styling for File Input */
+    .file-label {
+        display: inline-block;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .file-label:hover {
+        background-color: #e9ecef;
+    }
+
+    /* Animation for buttons */
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    const messageInput = document.getElementById('messageContent');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    messageInput.addEventListener('input', function() {
+        typingIndicator.style.display = 'block';
+        clearTimeout(window.typingTimeout);
+        window.typingTimeout = setTimeout(function() {
+            typingIndicator.style.display = 'none';
+        }, 1500);
+    });
+</script>
+{% endblock %}
+{% endblock %}

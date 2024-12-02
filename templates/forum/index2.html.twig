@@ -1,0 +1,194 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum{% endblock %}
+
+{% block body %}
+<div class="index-page">
+    <h1 class="text-center my-5 text-primary font-weight-bold">Forum</h1>
+
+    <!-- Search Form -->
+    <form method="GET" action="{{ path('app_forum_front_index') }}" class="mb-4">
+        <div class="input-group justify-content-center">
+            <input type="text" name="query" class="form-control rounded-pill border-0 shadow-sm" placeholder="Search for a forum"
+                   value="{{ app.request.query.get('query') }}">
+            <button type="submit" class="btn btn-primary rounded-pill shadow-sm">
+                <i class="bi bi-search"></i> Search
+            </button>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for forum in forums %}
+            <div class="col">
+                <div class="card shadow-lg border-light rounded-lg overflow-hidden">
+                    <!-- Forum banner with random background color -->
+                    <div class="forum-banner" style="background-color: {{ forum.randomColor }};">
+                        <div class="forum-title-overlay">
+                            <h5 class="card-title text-white">{{ forum.titreForum }}</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ forum.descriptionForum|slice(0, 150) ~ '...' }}</p>
+                        <p class="card-text"><small class="text-muted">Creator: {{ forum.createurForum.nomUser }}</small></p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{{ path('app_forum_front_show', {'idForum': forum.idForum}) }}" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">No forums found.</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{{ path('app_forum_front_new') }}" class="btn btn-success btn-lg rounded-pill shadow-lg">
+            <i class="bi bi-plus-circle"></i> Create New Forum
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    /* General page styling */
+    .index-page {
+        padding: 40px 30px;
+        background-color: #f7f9fc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Title styling */
+    h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #007bff;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Forum banner styling */
+    .forum-banner {
+        height: 250px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .forum-title-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .forum-title-overlay h5 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Card styling and hover effects */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+    }
+
+    .card:hover {
+        transform: translateY(-5px); /* Subtle lift effect */
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Forum banner hover effect */
+    .forum-banner:hover {
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+    }
+
+    /* Card body hover effect */
+    .card-body:hover {
+        background-color: #f1f5f9;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Button styling */
+    .btn-outline-info {
+        border-radius: 30px;
+        padding: 8px 20px;
+        border-color: #17a2b8;
+        color: #17a2b8;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #17a2b8;
+        color: white;
+        transform: scale(1.05);
+        transition: transform 0.2s ease;
+    }
+
+    .btn-success {
+        font-size: 1.2rem;
+        padding: 12px 30px;
+        border-radius: 50px;
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+    }
+
+    .btn-success:hover {
+        background-color: #28a745;
+        color: white;
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-sm i, .btn-lg i {
+        margin-right: 5px;
+    }
+
+    /* Search input and button styles */
+    .input-group {
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    .form-control {
+        height: 50px;
+        border-radius: 30px;
+        padding: 15px;
+        font-size: 1.1rem;
+        border: 1px solid #ccc;
+    }
+
+    .btn-primary {
+        border-radius: 30px;
+        font-size: 1.1rem;
+        padding: 12px 25px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Decorative divider between sections */
+    .section-divider {
+        border-top: 2px solid #ddd;
+        margin: 40px 0;
+    }
+</style>
+{% endblock %}
