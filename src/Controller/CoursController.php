@@ -47,6 +47,7 @@ final class CoursController extends AbstractController
     {
         return $this->render('cours/show.html.twig', [
             'cour' => $cour,
+           /* 'isBackoffice' => true,*/ 
         ]);
     }
 
@@ -58,6 +59,8 @@ final class CoursController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            // Ajout d'un message flash
+        $this->addFlash('success', 'Le cours a été modifié avec succès.');
 
             return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -78,4 +81,45 @@ final class CoursController extends AbstractController
 
         return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
     }
+    // Affiche les ressources liées à un cours
+    #[Route('/{Id_Cours}/ressources', name: 'app_cours_ressources', methods: ['GET'])]
+    public function showRessources(int $Id_Cours, RessourceRepository $ressourceRepository): Response
+    {
+        // Récupérer le cours par son ID
+        $cours = $this->getDoctrine()->getRepository(Cours::class)->find($Id_Cours);
+        
+        // Vérifier si le cours existe
+        if (!$cours) {
+            throw $this->createNotFoundException('Le cours demandé n\'existe pas.');
+        }
+
+        // Récupérer toutes les ressources liées au cours
+        $ressources = $ressourceRepository->findBy(['Id_Cours' => $cours]);
+
+        // Retourner la vue avec les ressources
+        return $this->render('cours/ressources.html.twig', [
+            'cours' => $cours,
+            'ressources' => $ressources,
+        ]);
+    }
+    #[Route('app_cours_index2', methods: ['GET'])]
+    public function index2(CoursRepository $coursRepository): Response
+    {
+        return $this->render('cours/index2.html.twig', [
+            'cours' => $coursRepository->findAll(),
+        ]);
+    }
+   
+   #[Route('/front/{Id_Cours}', name: 'app_cours_show2', methods: ['GET'])]
+    public function show2(Cours $cour): Response
+    {
+      
+        return $this->render('cours/show2.html.twig', [
+            'cour' => $cour,
+        
+            /*'isBackoffice' => false,*/ 
+        ]);
+    }
+   
+   
 }

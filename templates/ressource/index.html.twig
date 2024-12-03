@@ -3,43 +3,27 @@
 {% block title %}Ressource index{% endblock %}
 
 {% block body %}
-    <h1>Ressource index</h1>
+    <h1>Ressource</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id_Ressource</th>
-                <th>Titre_Ressource</th>
-                <th>Description_Ressource</th>
-                <th>Type_Ressource</th>
-                <th>Id_Enseignat_Ressource</th>
-                <th>Url_Ressource</th>
-                <th>DateCreation_Ressource</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="row justify-content-center">
         {% for ressource in ressources %}
-            <tr>
-                <td>{{ ressource.IdRessource }}</td>
-                <td>{{ ressource.TitreRessource }}</td>
-                <td>{{ ressource.DescriptionRessource }}</td>
-                <td>{{ ressource.TypeRessource.value }}</td>
-                <td>{{ ressource.IdEnseignatRessource }}</td>
-                <td>{{ ressource.UrlRessource }}</td>
-                <td>{{ ressource.DateCreationRessource ? ressource.DateCreationRessource|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_ressource_show', {'Id_Ressource': ressource.idRessource}) }}">show</a>
-                    <a href="{{ path('app_ressource_edit', {'Id_Ressource': ressource.idRessource}) }}">edit</a>
-                </td>
-            </tr>
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
+                <div class="card" style="width: 18rem;">
+                    <img src="{{ asset('img/ressimg1.jpg') }}" class="card-img-top" alt="Image de la ressource" style="height: 150px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title text-truncate">{{ ressource.TitreRessource }}</h6>
+                        <p class="card-text text-truncate" style="max-width: 100%;">
+                            {{ ressource.DescriptionRessource }}
+                        </p>
+                        <p><strong>Type:</strong> {{ ressource.TypeRessource.value }}</p>
+                        <a href="{{ path('app_ressource_show', {'Id_Ressource': ressource.idRessource}) }}" class="btn btn-primary btn-sm">Details</a>
+                    </div>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
+            <p>No resources found.</p>
         {% endfor %}
-        </tbody>
-    </table>
+    </div>
 
-    <a href="{{ path('app_ressource_new') }}">Create new</a>
+    <a href="{{ path('app_ressource_new') }}" class="btn btn-success mt-3">Create new</a>
 {% endblock %}

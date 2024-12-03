@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cours index{% endblock %}
+
+{% block body %}
+    <h1>Courses</h1>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4"> 
+        {% for cour in cours %}
+            <div class="col mb-4">
+                <div class="card" style="height: 100%;"> 
+                    <!-- Image du cours, statique ici -->
+                    <img src="{{ asset('img/cours1.jpg') }}" class="card-img-top" alt="Image du cours" style="object-fit: cover; height: 180px;"> 
+                    <div class="card-body">
+                        <!-- Titre du cours -->
+                        <h5 class="card-title" style="font-size: 1.2rem;">{{ cour.TitreCours }}
+                        <!-- Description (si nécessaire) -->
+                        <p class="card-text" style="font-size: 0.9rem;">{{ cour.DescriptioCours|slice(0, 100) }}...</p> <!-- Réduction de la taille du texte -->
+                        
+                        <a href="{{ path('app_cours_show2', {'Id_Cours': cour.IdCours}) }}" class="btn btn-primary">Voir les détails</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun cours trouvé.</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}

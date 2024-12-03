@@ -3,11 +3,113 @@
 {% block title %}Edit Ressource{% endblock %}
 
 {% block body %}
-    <h1>Edit Ressource</h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5"> <!-- Réduction de la largeur -->
+                <h1 class="text-center mb-4">Edit Ressource</h1>
+                
+                {% if app.flashes('success') %}
+                    <div class="alert alert-success text-center">
+                        {{ app.flashes('success')|first }}
+                    </div>
+                {% endif %}
+                
+                <div class="card shadow-sm" style="border-radius: 10px; border: none;">
+                    <div class="card-body">
+                        {{ form_start(form, { 'attr': { 'class': 'form' } }) }}
+                        
+                        {{ form_row(form.Titre_Ressource, {
+                            'label': 'Titre de la Ressource',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        {{ form_row(form.Description_Ressource, {
+                            'label': 'Description',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        {{ form_row(form.Type_Ressource, {
+                            'label': 'Type de Ressource',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        {{ form_row(form.Id_Cours, {
+                            'label': 'Cours associé',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        {{ form_row(form.Url_Ressource, {
+                            'label': 'URL de la Ressource',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        {{ form_row(form.DateCreation_Ressource, {
+                            'label': 'Date de création',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {
+                                'class': 'form-control mb-3',
+                                'type': 'date'
+                            }
+                        }) }}
+                        
+                        {{ form_row(form.Id_Enseignat_Ressource, {
+                            'label': 'ID Enseignant',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        <div class="text-center mt-4">
+                            <!-- Button to trigger modal -->
+                            <button type="button" class="btn btn-success px-4" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                                Sauvegarder
+                            </button>
+                        </div>
+                        
+                        {{ form_end(form) }}
+                    </div>
+                </div>
 
-    {{ include('ressource/_form.html.twig', {'button_label': 'Update'}) }}
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_ressource_index') }}" class="btn btn-warning px-3">Back to list</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_ressource_index') }}">back to list</a>
+    <!-- Modal for confirmation -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Êtes-vous sûr de vouloir modifier la ressource ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Les modifications seront appliquées immédiatement. Êtes-vous sûr de vouloir continuer ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <!-- Form submission inside modal -->
+                    <button type="button" class="btn btn-success" id="confirmBtn">Confirmer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    {{ include('ressource/_delete_form.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Handle the confirm button click event
+        document.getElementById('confirmBtn').addEventListener('click', function() {
+            // Submit the form when the "Confirmer" button is clicked
+            document.querySelector('form').submit();
+        });
+    </script>
 {% endblock %}

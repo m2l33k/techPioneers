@@ -3,7 +3,7 @@
 {% block title %}Ressource{% endblock %}
 
 {% block body %}
-    <h1>Ressource</h1>
+    <h1>Détails de la Ressource</h1>
 
     <table class="table">
         <tbody>
@@ -24,7 +24,7 @@
                 <td>{{ ressource.TypeRessource.value }}</td>
             </tr>
             <tr>
-                <th>Id_Enseignat_Ressource</th>
+                <th>Id_Enseignant_Ressource</th>
                 <td>{{ ressource.IdEnseignatRessource }}</td>
             </tr>
             <tr>
@@ -38,9 +38,14 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_ressource_index') }}">back to list</a>
-
-    <a href="{{ path('app_ressource_edit', {'Id_Ressource': ressource.idRessource}) }}">edit</a>
-
-    {{ include('ressource/_delete_form.html.twig') }}
+    <div class="text-center mt-4">
+        <!-- Bouton Retour à la liste -->
+        <a href="{{ path('app_ressource_index') }}" class="btn btn-success btn-lg">Retour à la liste</a>
+        
+        <!-- Bouton Editer -->
+        <a href="{{ path('app_ressource_edit', {'Id_Ressource': ressource.idRessource}) }}" class="btn btn-warning btn-lg">Éditer</a>
+        
+        <!-- Formulaire de suppression -->
+        {{ include('ressource/_delete_form.html.twig') }}
+    </div>
 {% endblock %}
