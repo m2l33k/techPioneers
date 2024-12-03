@@ -87,4 +87,13 @@ final class EvenementController extends AbstractController
         ],);
     }
 
+    #[Route('',name: 'app_event1', methods: ['GET'])]
+    public function evenement(EvenementRepository $evenementRepository): Response
+    {
+        return $this->render('evenement/index1.html.twig', [
+            'evenements' => $evenementRepository->findAll(),
+        ],);
+    }
+
+
 }

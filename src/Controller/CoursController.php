@@ -78,4 +78,14 @@ final class CoursController extends AbstractController
 
         return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    #[Route(name: 'app_cours', methods: ['GET'])]
+    public function cours(CoursRepository $coursRepository): Response
+    {
+        return $this->render('cours/index1.html.twig', [
+            'cours' => $coursRepository->findAll(),
+        ]);
+    }
+    
 }
