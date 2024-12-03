@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Details{% endblock %}
+
+{% block body %}
+<div class="show-page">
+    <h1 class="text-center">User Details</h1>
+
+    <div class="details-container">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td>{{ user.idUser }}</td>
+                </tr>
+                <tr>
+                    <th>First Name</th>
+                    <td>{{ user.nomUser }}</td>
+                </tr>
+                <tr>
+                    <th>Last Name</th>
+                    <td>{{ user.prenomUser }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.emailUser }}</td>
+                </tr>
+                <tr>
+                    <th>Password</th>
+                    <td>{{ user.motdepasseUser }}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>{{ user.numtelephoneUser }}</td>
+                </tr>
+                <tr>
+                    <th>Role</th>
+                   <td>{{ user.roleUser.value }}</td>
+
+                </tr>
+                <tr>
+                    <th>Date of Birth</th>
+                    <td>{{ user.datenaissanceUser ? user.datenaissanceUser|date('Y-m-d') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Photo</th>
+                    <td>{{ user.photoUser }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="action-buttons text-center">
+        <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Back to List</a>
+        <a href="{{ path('app_user_edit', {'id': user.idUser}) }}" class="btn btn-primary">Edit</a>
+        {{ include('user/_delete_form.html.twig', {'button_class': 'btn btn-danger'}) }}
+    </div>
+</div>
+{% endblock %}

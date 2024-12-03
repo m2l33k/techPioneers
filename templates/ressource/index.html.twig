@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ressource index{% endblock %}
+
+{% block body %}
+    <h1>Ressource index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id_Ressource</th>
+                <th>Titre_Ressource</th>
+                <th>Description_Ressource</th>
+                <th>Type_Ressource</th>
+                <th>Id_Enseignat_Ressource</th>
+                <th>Url_Ressource</th>
+                <th>DateCreation_Ressource</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ressource in ressources %}
+            <tr>
+                <td>{{ ressource.IdRessource }}</td>
+                <td>{{ ressource.TitreRessource }}</td>
+                <td>{{ ressource.DescriptionRessource }}</td>
+                <td>{{ ressource.TypeRessource.value }}</td>
+                <td>{{ ressource.IdEnseignatRessource }}</td>
+                <td>{{ ressource.UrlRessource }}</td>
+                <td>{{ ressource.DateCreationRessource ? ressource.DateCreationRessource|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+<a href="{{ path('app_ressource_show', {'Id_Ressource': ressource.idRessource}) }}">show</a>
+<a href="{{ path('app_ressource_edit', {'Id_Ressource': ressource.idRessource}) }}">edit</a>
+
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ressource_new') }}">Create new</a>
+{% endblock %}
