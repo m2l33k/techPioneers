@@ -40,49 +40,43 @@ public function index(Request $request, MessageForumRepository $messageForumRepo
 }
     
 
-    #[Route('/{idForum}/new', name: 'app_message_forum_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, int $idForum, Security $security): Response
-    {
-        // Find the forum where the message will be added
-        $forum = $entityManager->getRepository(Forum::class)->find($idForum); // Correct repository: Forum
-    
-        if (!$forum) {
-            throw $this->createNotFoundException('Forum not found.');
-        }
-    
-        // Create a new message associated with the forum
-        $message = new MessageForum();
-        $message->setForum($forum);  // Correctly setting the Forum entity
-    
-        // Get the logged-in user and set the creator of the message
-        $user = $security->getUser(); // This gets the currently authenticated user
-    
-        // Check if the user is an instance of your custom User entity
-        if (!$user instanceof User) {
-            throw $this->createAccessDeniedException('You must be logged in to create a message.');
-        }
-    
-        $message->setCreateurMessageForum($user);  // Set the user as the creator
-    
-        $message->setDateCreationIdMessageForum(new \DateTime());  // Set the creation date
-    
-        // Handle the form submission
-        $form = $this->createForm(MessageForumType::class, $message);
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($message);
-            $entityManager->flush();
-    
-            // Redirect to the forum's chat page to display the new message
-            return $this->redirectToRoute('app_message_forum_show', ['Id_MessageForum' => $message->getIdMessageForum()]);
-        }
-    
-        return $this->render('message_forum/show2.html.twig', [
-            'form' => $form->createView(),
-            'forum' => $forum,  // Pass the forum object for context
-        ]);
+#[Route('/{idForum}/new', name: 'app_message_forum_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $entityManager, int $idForum): Response
+{
+    $forum = $entityManager->getRepository(Forum::class)->find($idForum);
+
+    if (!$forum) {
+        throw $this->createNotFoundException('Forum not found.');
     }
+
+    $message = new MessageForum();
+    $message->setForum($forum);
+
+    // Fetch a default user (e.g., user with ID 1) and assign it
+    $defaultUser = $entityManager->getRepository(User::class)->find(1); // Replace '1' with your default user's ID
+    if (!$defaultUser) {
+        throw $this->createNotFoundException('Default user not found.');
+    }
+    $message->setCreateurMessageForum($defaultUser);
+
+    $message->setDateCreationIdMessageForum(new \DateTime());
+
+    $form = $this->createForm(MessageForumType::class, $message);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($message);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_message_forum_show', ['Id_MessageForum' => $message->getIdMessageForum()]);
+    }
+
+    return $this->render('forum/show2.html.twig', [
+        'form' => $form->createView(),
+        'forum' => $forum,
+    ]);
+}
+
     
 
    #[Route('/{idMessageForum}', name: 'app_message_forum_show', methods: ['GET'])]
