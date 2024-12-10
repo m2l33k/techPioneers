@@ -3,7 +3,16 @@
 {% block title %}Ressource index{% endblock %}
 
 {% block body %}
-    <h1>Ressource</h1>
+    <h1 class="page-title">Ressources</h1>
+
+    <!-- Formulaire de recherche par nom de cours -->
+    
+     <form method="get" action="{{ path('app_ressource_index') }}" class="mb-4" style="max-width: 50%; margin: 0 auto;">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search by course title... " name="titreRessource" value="{{ app.request.query.get('titreRessource') }}">
+            <button class="btn btn-success"  type="submit">Search</button>
+        </div>
+    </form>
 
     <div class="row justify-content-center">
         {% for ressource in ressources %}
@@ -26,4 +35,23 @@
     </div>
 
     <a href="{{ path('app_ressource_new') }}" class="btn btn-success mt-3">Create new</a>
+{% endblock %}
+{% block stylesheets %}
+    <style>
+        /* Style pour le titre COURSES */
+        .page-title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Police moderne */
+            font-size: 3rem; /* Taille plus grande */
+            font-weight: 600; /* Gras */
+            color: #4CAF50; /* Couleur verte */
+            text-align: center; /* Centré */
+            text-transform: uppercase; /* En majuscules */
+            letter-spacing: 2px; /* Espacement entre les lettres */
+            margin-top: 30px; /* Espacement en haut */
+            margin-bottom: 30px; /* Espacement en bas */
+            border-bottom: 3px solid #4CAF50; /* Ligne en dessous */
+            padding-bottom: 10px; /* Espacement entre le texte et la ligne */
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+        }
+    </style>
 {% endblock %}

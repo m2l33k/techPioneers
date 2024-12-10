@@ -15,11 +15,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class RessourceController extends AbstractController
 {
     #[Route(name: 'app_ressource_index', methods: ['GET'])]
-    public function index(RessourceRepository $ressourceRepository): Response
+    public function index(RessourceRepository $ressourceRepository,Request $request): Response
     {
-        return $this->render('ressource/index.html.twig', [
-            'ressources' => $ressourceRepository->findAll(),
-        ]);
+      // Récupère le paramètre de recherche du titre de la ressource
+      $titreRessource = $request->query->get('titreRessource');
+
+      // Si un titre est fourni, effectue la recherche
+      if ($titreRessource) {
+          $ressources = $ressourceRepository->findByTitreRessource($titreRessource);
+      } else {
+          $ressources = $ressourceRepository->findAll();  // Sinon, récupère toutes les ressources
+      }
+
+      return $this->render('ressource/index.html.twig', [
+          'ressources' => $ressources,
+      ]);
     }
 
     #[Route('/new', name: 'app_ressource_new', methods: ['GET', 'POST'])]

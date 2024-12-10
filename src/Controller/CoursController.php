@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Cours;
 use App\Form\CoursType;
+use App\Repository\RessourceRepository;
 use App\Repository\CoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -103,11 +104,20 @@ final class CoursController extends AbstractController
         ]);
     }
     #[Route('app_cours_index2', methods: ['GET'])]
-    public function index2(CoursRepository $coursRepository): Response
+    public function index2(Request $request,CoursRepository $coursRepository): Response
     {
-        return $this->render('cours/index2.html.twig', [
-            'cours' => $coursRepository->findAll(),
-        ]);
+       // Récupère le terme de recherche s'il existe
+    $searchTerm = $request->query->get('search', '');
+
+    // Si un terme de recherche est fourni, rechercher les cours correspondants, sinon tous les cours
+    $cours = $searchTerm
+        ? $coursRepository->findByTitle($searchTerm) // Méthode custom dans le repository pour rechercher
+        : $coursRepository->findAll(); // Tous les cours si pas de recherche
+
+    return $this->render('cours/index2.html.twig', [
+        'cours' => $cours,
+        'searchTerm' => $searchTerm, // Envoyer le terme de recherche pour le pré-remplir dans le champ
+    ]);
     }
    
    #[Route('/front/{Id_Cours}', name: 'app_cours_show2', methods: ['GET'])]
@@ -118,6 +128,16 @@ final class CoursController extends AbstractController
             'cour' => $cour,
         
             /*'isBackoffice' => false,*/ 
+        ]);
+    }
+    //meth bch pour afficher tous les ressources pour le front 
+    #[Route('/ressources', name: 'app_all_ressources', methods: ['GET'])]
+    public function allRessources(RessourceRepository $ressourceRepository): Response
+    {
+        $ressources = $ressourceRepository->findAll();
+    
+        return $this->render('cours/all_ressources.html.twig', [
+            'ressources' => $ressources,
         ]);
     }
    
