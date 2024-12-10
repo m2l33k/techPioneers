@@ -1,28 +1,21 @@
-<!-- ressources.html.twig -->
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Ressources du Cours: {{ cours.TitreCours }}{% endblock %}
+{% block title %}Ressources du Cours{% endblock %}
 
 {% block body %}
-    <h1>Ressources du Cours: {{ cours.TitreCours }}</h1>
+    <h1>Ressources du Cours</h1>
 
-    <div class="row">
-        {% for ressource in ressources %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{{ asset('img/ressimg1.jpg') }}" class="card-img-top" alt="Image de la ressource" style="height: 150px; object-fit: cover;">
-                    <div class="card-body">
-                        <h6 class="card-title">{{ ressource.TitreRessource }}</h6>
-                        <p class="card-text">{{ ressource.DescriptionRessource|slice(0, 100) }}...</p>
-                        <a href="{{ ressource.UrlRessource }}" class="btn btn-primary" target="_blank">Voir la ressource</a>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <p>Aucune ressource trouvée pour ce cours.</p>
-        {% endfor %}
-    </div>
+    {% if ressources is empty %}
+        <p>Aucune ressource n'a été trouvée pour ce cours.</p>
+    {% else %}
+        <ul>
+            {% for ressource in ressources %}
+                <li>
+                    {{ ressource.nom }} (Type : {{ ressource.type }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-    <a href="{{ path('app_cours_index') }}" class="btn btn-secondary">Retour à la liste des cours</a>
+    <a href="{{ path('app_cours_index') }}">Retour aux cours</a>
 {% endblock %}

@@ -1,37 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Cours{% endblock %}
+{% block title %}Course Details{% endblock %}
 
 {% block body %}
-    <h1>Courses</h1>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Détails du Cours</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>ID</th>
-                <td>{{ cour.idCours }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ cour.titreCours }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ cour.descriptioCours }}</td>
-            </tr>
-            <tr>
-                <th>Instructor ID</th>
-                <td>{{ cour.idEnseignantCours }}</td>
-            </tr>
-            <tr>
-                <th>Creation Date</th>
-                <td>{{ cour.dateCreationCours ? cour.dateCreationCours|date('Y-m-d H:i:s') : 'Not set' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- Table des détails du cours avec un style moderne -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <td>{{ cour.idCours }}</td>
+                        </tr>
+                        <tr>
+                            <th>Titre</th>
+                            <td>{{ cour.titreCours }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ cour.descriptioCours }}</td>
+                        </tr>
+                        <tr>
+                            <th>ID Enseignant</th>
+                            <td>{{ cour.idEnseignantCours }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de Création</th>
+                            <td>{{ cour.dateCreationCours ? cour.dateCreationCours|date('Y-m-d H:i:s') : 'Non définie' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-     <a href="{{ path('app_cours_index2') }}" class="btn btn-primary">Back to list</a>
-   
-        
-    
+        <div class="d-flex justify-content-center mt-4">
+            <!-- Bouton Retour à la liste -->
+            <a href="{{ path('app_cours_index2') }}" class="btn btn-success btn-lg mx-2 px-4 py-2">
+                <i class="bi bi-arrow-left-circle"></i> Back to the list
+            </a>
+              </a>
+
+            <!-- Bouton Générer un PDF -->
+            <a href="{{ path('app_generate_pdf', { 'Id_Cours': cour.idCours }) }}" class="btn btn-primary btn-lg mx-2 px-4 py-2">
+                <i class="bi bi-file-earmark-pdf"></i> Generate as PDF
+            </a>
+        </div>
+    </div>
 {% endblock %}

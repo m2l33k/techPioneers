@@ -87,4 +87,5 @@ class Cours
     {
     return $this->Titre_Cours; 
     }
+    
 }

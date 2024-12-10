@@ -1,0 +1,25 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #0f4275;
+        }
+        p {
+            margin: 10px 0;
+        }
+        hr {
+            margin: 20px 0;
+        }
+    </style>
+    <h1>{{ cour.titreCours }}</h1>
+    <p><strong>Description:</strong> {{ cour.descriptioCours }}</p>
+{% endblock %}
+
