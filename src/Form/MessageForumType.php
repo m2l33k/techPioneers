@@ -29,10 +29,7 @@ class MessageForumType extends AbstractType
                 'choice_label' => 'titre_forum',  // Assuming `name` is a property in the `Forum` entity
                 'placeholder' => 'Choose a forum',
             ])
-            ->add('DateCreationIdMessageForum', null, [
-                'widget' => 'single_text',
-                'label' => 'Message creation date '
-            ])
+            
         ;
     }
 

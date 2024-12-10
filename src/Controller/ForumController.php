@@ -26,9 +26,8 @@ final class ForumController extends AbstractController
     #[Route('/', name: 'app_forum_index', methods: ['GET'])]
     public function index(Request $request, ForumRepository $forumRepository)
     {
-        $query = $request->query->get('query');  // Get the search query from the URL
+        $query = $request->query->get('query');  
 
-        // If a query is provided, filter the forums based on it
         if ($query) {
             $forums = $forumRepository->searchForumsByQuery($query);
         } else {
@@ -43,20 +42,19 @@ final class ForumController extends AbstractController
     #[Route('/forum', name: 'app_forum_front_index')]
 public function indexFront(ForumRepository $forumRepository, UserRepository $userRepository, Request $request): Response
 {
-    $query = $request->query->get('query', '');  // Search query
-    $creatorId = $request->query->get('creator'); // Creator filter
-    $sortByDate = $request->query->get('sortByDate'); // Sort by date (most recent first)
-    $sortByActivity = $request->query->get('sortByActivity'); // Sort by activity (most messages)
+    $query = $request->query->get('query', '');  
+    $creatorId = $request->query->get('creator'); 
+    $sortByDate = $request->query->get('sortByDate'); 
+    $sortByActivity = $request->query->get('sortByActivity'); 
 
-    // Cast creatorId to an integer, or null if it's empty or invalid
+  
     $creatorId = $creatorId ? (int) $creatorId : null;
 
-    // Fetch forums based on the search query or filter
     if (!empty($query)) {
-        // Perform search only
+       
         $forums = $forumRepository->searchForumsByQuery($query);
     } else {
-        // Perform filter only (if no search query)
+        
         $forums = $forumRepository->filterForums($creatorId, $sortByDate, $sortByActivity);
     }
 
@@ -65,7 +63,6 @@ public function indexFront(ForumRepository $forumRepository, UserRepository $use
         $forum->randomColor = sprintf('#%06X', mt_rand(0, 0xFFFFFF)); // Random hex color
     }
 
-    // Fetch users for the creator filter dropdown
     $users = $userRepository->findAll();
 
     return $this->render('forum/index2.html.twig', [

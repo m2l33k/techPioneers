@@ -20,18 +20,17 @@ class ForumRepository extends ServiceEntityRepository
      * Search forums based on a query (title or creator's name)
      */
     public function searchForumsByQuery(string $query = null)
-    {
-        $qb = $this->createQueryBuilder('f')
-            ->leftJoin('f.createurForum', 'u')
-            ->addSelect('u');
+{
+    $qb = $this->createQueryBuilder('f');
     
-        if ($query) {
-            $qb->andWhere('f.titreForum LIKE :query OR f.descriptionForum LIKE :query OR u.nomUser LIKE :query')
-               ->setParameter('query', '%' . $query . '%');
-        }
-    
-        return $qb->getQuery()->getResult();
+    if ($query) {
+        $qb->andWhere('f.titreForum LIKE :query OR f.descriptionForum LIKE :query')
+           ->setParameter('query', '%' . $query . '%');
     }
+    
+    return $qb->getQuery()->getResult();
+}
+
     
 
     /**
