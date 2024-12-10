@@ -4,6 +4,8 @@ namespace App\Entity;
 use App\Repository\MessageForumRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Forum;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: MessageForumRepository::class)]
 class MessageForum
@@ -21,12 +23,14 @@ class MessageForum
     // No need for 'id_forum' property explicitly in the entity
     #[ORM\ManyToOne(targetEntity: Forum::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(name: 'id_forum', referencedColumnName: 'id_forum', nullable: true)]
+    #[Groups(['message:read'])]
     private ?Forum $forum;
 
     #[ORM\Column(type: 'text')]
     private string $ConetenuIdMessageForum;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['message:read'])]
     private \DateTimeInterface $DateCreationIdMessageForum;
 
     // Getters and Setters

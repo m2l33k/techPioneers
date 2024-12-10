@@ -8,8 +8,8 @@
 
     <div class="card shadow-lg mb-4">
         <div class="card-body">
-            <h4 class="card-title text-primary">{{ forum.titreForum }}</h4>
-            <p class="card-text">{{ forum.descriptionForum }}</p>
+            <h4 class="card-title text-primary">Title : {{ forum.titreForum }}</h4>
+            <p class="card-text">Description : {{ forum.descriptionForum }}</p>
 
             <hr>
 
@@ -19,7 +19,7 @@
                 </div>
                 <div>
                     <a href="{{ path('app_forum_edit', {'idForum': forum.idForum}) }}" class="btn btn-outline-primary btn-sm">Edit</a>
-                    {{ include('forum/_delete_form.html.twig', {'button_class': 'btn btn-outline-danger btn-sm'}) }}
+{{ include('forum/_delete_form.html.twig', {'IdMessageForum': forum.idForum, 'button_class': 'btn btn-outline-danger btn-sm'}) }}
                 </div>
             </div>
         </div>

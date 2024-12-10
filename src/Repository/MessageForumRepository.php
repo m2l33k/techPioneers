@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\MessageForum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Forum;
 
 /**
  * @extends ServiceEntityRepository<MessageForum>
@@ -37,6 +38,21 @@ class MessageForumRepository extends ServiceEntityRepository
         
         return $qb->getQuery()->getResult();
     }
+
+    public function searchByForumAndQuery(Forum $forum, ?string $search): array
+{
+    $qb = $this->createQueryBuilder('m')
+        ->where('m.forum = :forum')
+        ->setParameter('forum', $forum);
+
+    if ($search) {
+        $qb->andWhere('m.ConetenuIdMessageForum LIKE :search')
+           ->setParameter('search', '%' . $search . '%');
+    }
+
+    return $qb->getQuery()->getResult();
+}
+
     //    /**
     //     * @return MessageForum[] Returns an array of MessageForum objects
     //     */

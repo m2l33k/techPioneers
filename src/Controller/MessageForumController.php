@@ -118,7 +118,6 @@ public function edit(Request $request, EntityManagerInterface $em, int $id_messa
 }
 
     
-
 #[Route('/{IdMessageForum}', name: 'app_message_forum_delete', methods: ['POST'])]
 public function delete(Request $request, int $IdMessageForum, MessageForumRepository $messageForumRepository, EntityManagerInterface $entityManager): Response
 {
@@ -130,22 +129,25 @@ public function delete(Request $request, int $IdMessageForum, MessageForumReposi
         throw new NotFoundHttpException('MessageForum not found.');
     }
 
-    // Step 3: Validate CSRF token
-    $csrfToken = $request->request->get('_token');
-    dump('Received CSRF Token: ' . $csrfToken);  // Dump received token
-    dump('Generated CSRF Token: ' . 'delete' . $messageForum->getIdMessageForum());  // Dump expected token
-
-    if (!$this->isCsrfTokenValid('delete' . $messageForum->getIdMessageForum(), $csrfToken)) {
-        throw new \Exception('Invalid CSRF token');
-    }
-
-    // Step 4: Remove the message
+    // Step 3: Remove the message
     $entityManager->remove($messageForum);
     $entityManager->flush();
 
-    // Step 5: Redirect after deletion
+    // Step 4: Redirect after deletion
     return $this->redirectToRoute('app_message_forum_index', [], Response::HTTP_SEE_OTHER);
 }
+
+
+// This method should render a delete form, passing IdMessageForum
+#[Route('/{IdMessageForum}/delete', name: 'app_message_forum_delete_form')]
+public function deleteForm(int $IdMessageForum): Response
+{
+    return $this->render('message_forum/_delete_form.html.twig', [
+        'IdMessageForum' => $IdMessageForum,
+    ]);
+}
+
+
 
 #[Route('/search', name: 'app_message_forum_search', methods: ['GET'])]
 public function search(Request $request, MessageForumRepository $messageForumRepository): Response
@@ -164,6 +166,8 @@ public function search(Request $request, MessageForumRepository $messageForumRep
         'results' => $results,
     ]);
 }
+
+
 
 
 

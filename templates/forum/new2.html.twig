@@ -16,21 +16,27 @@
                 <div class="mb-4">
                     <label for="titreForum" class="form-label text-dark fw-semibold">Forum Title</label>
                     {{ form_widget(form.titreForum, {'attr': {'class': 'form-control form-control-lg'}}) }}
-                    {{ form_errors(form.titreForum) }}
+                    <div class="text-danger">
+                        {{ form_errors(form.titreForum) }} {# Validation error in red #}
+                    </div>
                 </div>
 
                 <!-- Forum Description -->
                 <div class="mb-4">
                     <label for="descriptionForum" class="form-label text-dark fw-semibold">Forum Description</label>
                     {{ form_widget(form.descriptionForum, {'attr': {'class': 'form-control form-control-lg', 'rows': 4}}) }}
-                    {{ form_errors(form.descriptionForum) }}
+                    <div class="text-danger">
+                        {{ form_errors(form.descriptionForum) }} {# Validation error in red #}
+                    </div>
                 </div>
 
                 <!-- Forum Creator -->
                 <div class="mb-4">
                     <label for="createurForum" class="form-label text-dark fw-semibold">Forum Creator</label>
                     {{ form_widget(form.createurForum, {'attr': {'class': 'form-select form-select-lg'}}) }}
-                    {{ form_errors(form.createurForum) }}
+                    <div class="text-danger">
+                        {{ form_errors(form.createurForum) }} {# Validation error in red #}
+                    </div>
                 </div>
 
                 <!-- Submit Button -->
@@ -44,7 +50,7 @@
     </div>
 
     <div class="text-center mt-4">
-       <a href="{{ path('app_forum_front_index') }}" class="btn btn-outline-dark btn-lg">Back to Forum List</a>
+        <a href="{{ path('app_forum_front_index') }}" class="btn btn-outline-dark btn-lg">Back to Forum List</a>
     </div>
 </div>
 {% endblock %}

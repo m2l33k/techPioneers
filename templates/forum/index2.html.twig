@@ -6,17 +6,57 @@
 <div class="index-page">
     <h1 class="text-center my-5 text-primary font-weight-bold">Forum</h1>
 
-    <!-- Search Form -->
-    <form method="GET" action="{{ path('app_forum_front_index') }}" class="mb-4">
-        <div class="input-group justify-content-center">
-            <input type="text" name="query" class="form-control rounded-pill border-0 shadow-sm" placeholder="Search for a forum"
-                   value="{{ app.request.query.get('query') }}">
-            <button type="submit" class="btn btn-primary rounded-pill shadow-sm">
+    <!-- Filter Form -->
+    <form method="GET" action="{{ path('app_forum_front_index') }}" class="mb-4" id="filterForm">
+        <div class="input-group justify-content-center mb-3">
+            <input type="text" name="query" class="form-control rounded-pill border-0 shadow-sm" placeholder="Search for a forum" value="{{ app.request.query.get('query') }}">
+            
+            <!-- Smaller search button with label "Search" -->
+            <button class="btn btn-primary rounded-pill ms-2" type="submit" id="searchButton">
                 <i class="bi bi-search"></i> Search
             </button>
         </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+            <!-- Filter by Creator -->
+            <div class="col">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-circle text-muted"></i>
+                    <select name="creator" class="form-control rounded-pill border-0 shadow-sm ms-2" onchange="this.form.submit()">
+                        <option value="">Creator</option>
+                        {% for user in users %}
+                            <option value="{{ user.idUser }}" {% if app.request.query.get('creator') == user.idUser %}selected{% endif %}>{{ user.nomUser }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sort by Date -->
+            <div class="col">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-calendar text-muted"></i>
+                    <select name="sortByDate" class="form-control rounded-pill border-0 shadow-sm ms-2" onchange="this.form.submit()">
+                        <option value="">Sort by Date</option>
+                        <option value="recent" {% if app.request.query.get('sortByDate') == 'recent' %}selected{% endif %}>Most Recent</option>
+                        <option value="earlier" {% if app.request.query.get('sortByDate') == 'earlier' %}selected{% endif %}>Most Earlier</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sort by Activity (Most Active) -->
+            <div class="col">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-bar-chart-line text-muted"></i>
+                    <select name="sortByActivity" class="form-control rounded-pill border-0 shadow-sm ms-2" onchange="this.form.submit()">
+                        <option value="">Sort by Activity</option>
+                        <option value="active" {% if app.request.query.get('sortByActivity') == 'active' %}selected{% endif %}>Most Active</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </form>
 
+    <!-- Display Forums -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for forum in forums %}
             <div class="col">
@@ -72,61 +112,59 @@
         text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
     }
 
-    /* Forum banner styling */
-    .forum-banner {
-        height: 250px;
-        background-size: cover;
-        background-position: center;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
+    /* Input Group */
+    .input-group {
+        max-width: 650px;
+        margin: 0 auto;
     }
 
-    .forum-title-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background-color: rgba(0, 0, 0, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
+    /* Form control */
+    .form-control {
+        height: 50px;
+        border-radius: 30px;
+        padding: 15px;
+        font-size: 1.1rem;
+        border: 1px solid #ccc;
+        width: 100%;
     }
 
-    .forum-title-overlay h5 {
-        font-size: 1.8rem;
-        font-weight: 600;
-        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+    /* Filter by creator, activity, and date styling */
+    select.form-control {
+        border-radius: 30px;
+        padding: 12px;
+        font-size: 1rem;
     }
 
-    /* Card styling and hover effects */
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid #ddd;
+    /* Smaller search button */
+    .btn-primary {
+        border-radius: 30px;
+        font-size: 1rem;
+        padding: 10px 20px; /* Smaller padding */
     }
 
-    .card:hover {
-        transform: translateY(-5px); /* Subtle lift effect */
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    .btn-primary:hover {
+        background-color: #0056b3;
     }
 
-    /* Forum banner hover effect */
-    .forum-banner:hover {
-        opacity: 0.9;
-        transition: opacity 0.3s ease;
+    .input-group button {
+        font-size: 1rem; /* Smaller font size */
+        padding: 10px 20px; /* Smaller padding */
     }
 
-    /* Card body hover effect */
-    .card-body:hover {
-        background-color: #f1f5f9;
-        transition: background-color 0.3s ease;
+    .input-group button i {
+        margin-right: 5px;
+    }
+
+    /* Space between filters */
+    .row-cols-md-3 .col {
+        padding: 0 15px;
+    }
+
+    /* Adjust width for large screens */
+    @media (min-width: 768px) {
+        .row-cols-md-3 .col {
+            width: 30%;
+        }
     }
 
     /* Button styling */
@@ -144,51 +182,55 @@
         transition: transform 0.2s ease;
     }
 
+    /* Forum card styling */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Forum card banner styling */
+    .forum-banner {
+        position: relative;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .forum-banner:hover {
+        background-color: rgba(0, 0, 0, 0.3); /* Darker overlay on hover */
+    }
+
+    .forum-title-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    /* Button adjustments for creating forum */
     .btn-success {
-        font-size: 1.2rem;
+        border-radius: 30px;
+        font-size: 1.1rem;
         padding: 12px 30px;
-        border-radius: 50px;
-        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+        transition: all 0.3s ease;
     }
 
     .btn-success:hover {
         background-color: #28a745;
-        color: white;
-        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-    }
-
-    .btn-sm i, .btn-lg i {
-        margin-right: 5px;
-    }
-
-    /* Search input and button styles */
-    .input-group {
-        max-width: 650px;
-        margin: 0 auto;
-    }
-
-    .form-control {
-        height: 50px;
-        border-radius: 30px;
-        padding: 15px;
-        font-size: 1.1rem;
-        border: 1px solid #ccc;
-    }
-
-    .btn-primary {
-        border-radius: 30px;
-        font-size: 1.1rem;
-        padding: 12px 25px;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    /* Decorative divider between sections */
-    .section-divider {
-        border-top: 2px solid #ddd;
-        margin: 40px 0;
+        transform: scale(1.05);
     }
 </style>
 {% endblock %}
+

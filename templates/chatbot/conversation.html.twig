@@ -1,3 +1,6 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,54 +9,132 @@
     <title>Chatbot Conversation</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
+            padding: 0;
+            background-color: #e0f7fa;
         }
         #chat-container {
             max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 75vh;
+            overflow: hidden;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #00796b;
+            font-size: 2rem;
+        }
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            box-sizing: border-box;
         }
         .message {
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
-            border-radius: 8px;
+            border-radius: 10px;
+            word-wrap: break-word;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            max-width: 90%;
+            word-break: break-word;
         }
         .user-message {
-            background-color: #d1e7dd;
+            background-color: #00796b;
+            color: white;
             text-align: right;
+            align-self: flex-end;
+            border-radius: 12px 12px 0 12px;
+            margin-left: auto;
         }
         .bot-message {
-            background-color: #f8d7da;
+            background-color: #e0f2f1;
+            color: #00796b;
+            text-align: left;
+            align-self: flex-start;
+            border-radius: 12px 12px 12px 0;
         }
         form {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            justify-content: center;
             margin-top: 20px;
         }
         input[type="text"] {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 10px 15px;
+            border: 1px solid #00796b;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #004d40;
         }
         button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
+            padding: 12px 20px;
+            background-color: #00796b;
+            color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 30px;
+            font-size: 1rem;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #004d40;
+        }
+        .bot-typing {
+            color: #00796b;
+            font-style: italic;
+            text-align: center;
+            padding: 10px 0;
+        }
+        @media (max-width: 768px) {
+            #chat-container {
+                width: 90%;
+                padding: 15px;
+            }
+            input[type="text"] {
+                font-size: 0.9rem;
+            }
+            button {
+                font-size: 0.9rem;
+            }
         }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector("form");
+            const messagesContainer = document.getElementById("chat-messages");
+
+            form.addEventListener("submit", (event) => {
+                const typingIndicator = document.createElement("div");
+                typingIndicator.classList.add("bot-typing");
+                typingIndicator.textContent = "🤖 Typing...";
+                messagesContainer.appendChild(typingIndicator);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                setTimeout(() => {
+                    typingIndicator.remove(); // Simulate response arrival
+                }, 2000);
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -62,17 +143,18 @@
 
     <div id="chat-messages">
         {% for message in messages %}
-            <div class="message {{ message.type }}">
-                {{ message.content }}
+            <div class="message {% if '👤' in message.content %}user-message{% else %}bot-message{% endif %}">
+                {{ message.content|raw }}
             </div>
         {% endfor %}
     </div>
 
-    <form method="post" action="{{ path('chatbot_ask_ai') }}">
-        <input type="text" name="question" placeholder="Type your message..." required>
+    <form method="post">
+        <input type="text" name="question" placeholder="Type your message..." required autocomplete="off">
         <button type="submit">Send</button>
     </form>
 </div>
 
 </body>
 </html>
+{% endblock %}
