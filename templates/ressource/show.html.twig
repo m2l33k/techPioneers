@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ressource{% endblock %}
+
+{% block body %}
+    <h1>Ressource</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id_Ressource</th>
+                <td>{{ ressource.idRessource }}</td>
+            </tr>
+            <tr>
+                <th>Titre_Ressource</th>
+                <td>{{ ressource.TitreRessource }}</td>
+            </tr>
+            <tr>
+                <th>Description_Ressource</th>
+                <td>{{ ressource.DescriptionRessource }}</td>
+            </tr>
+            <tr>
+                <th>Type_Ressource</th>
+                <td>{{ ressource.TypeRessource.value }}</td>
+            </tr>
+            <tr>
+                <th>Id_Enseignat_Ressource</th>
+                <td>{{ ressource.IdEnseignatRessource }}</td>
+            </tr>
+            <tr>
+                <th>Url_Ressource</th>
+                <td>{{ ressource.UrlRessource }}</td>
+            </tr>
+            <tr>
+                <th>DateCreation_Ressource</th>
+                <td>{{ ressource.DateCreationRessource ? ressource.DateCreationRessource|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ressource_index') }}">back to list</a>
+
+    <a href="{{ path('app_ressource_edit', {'Id_Ressource': ressource.idRessource}) }}">edit</a>
+
+    {{ include('ressource/_delete_form.html.twig') }}
+{% endblock %}

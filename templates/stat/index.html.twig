@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistique Index{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Statistiques</h1>
+
+    <div class="row justify-content-center">
+        <!-- Stat Card: Users -->
+        <div class="col-md-3 mb-4">
+            <div class="stat text-center shadow-sm border-0">
+                <div class="stat-body">
+                    <h5 class="stat-title">Total Users</h5>
+                    <p class="stat-value">{{ totalUsers }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Stat Card: Events -->
+        <div class="col-md-3 mb-4">
+            <div class="stat text-center shadow-sm border-0">
+                <div class="stat-body">
+                    <h5 class="stat-title">Total Events</h5>
+                    <p class="stat-value">{{ totalEvents }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stat Card: Forums -->
+        <div class="col-md-3 mb-4">
+            <div class="stat text-center shadow-sm border-0">
+                <div class="stat-body">
+                    <h5 class="stat-title">Total Forums</h5>
+                    <p class="stat-value">{{ totalForums }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stat Card: Courses -->
+        <div class="col-md-3 mb-4">
+            <div class="stat text-center shadow-sm border-0">
+                <div class="stat-body">
+                    <h5 class="stat-title">Total Courses</h5>
+                    <p class="stat-value">{{ totalCourses }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stat Card: Resources -->
+        <div class="col-md-3 mb-4">
+            <div class="stat text-center shadow-sm border-0">
+                <div class="stat-body">
+                    <h5 class="stat-title">Total Resources</h5>
+                    <p class="stat-value">{{ totalResources }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

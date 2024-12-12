@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Index{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <h1 class="text-center mb-4">User Profiles</h1>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for user in users %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <!-- User Photo -->
+                    <img 
+                        src="{{asset('./img/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9-1722891867.jpg') }}" 
+                        class="card-img-top" 
+                        alt="{{ user.nomUser }} {{ user.prenomUser }}" 
+                        style="height: 250px; object-fit: cover;"
+                    >
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h5 class="card-title">{{ user.nomUser }} {{ user.prenomUser }}</h5>
+                        <p class="card-text">
+                            <strong>Email:</strong> {{ user.emailUser }}<br>
+                            <strong>Phone:</strong> {{ user.numtelephoneUser }}<br>
+                            <strong>Role:</strong> {{ user.roleUser.value }}<br>
+                            <strong>Date of Birth:</strong> {{ user.datenaissanceUser ? user.datenaissanceUser|date('Y-m-d') : 'N/A' }}
+                        </p>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="card-footer text-center">
+                        <a href="{{ path('app_user_show', {'id': user.idUser}) }}" class="btn btn-info btn-sm">View Profile</a>
+                        <a href="{{ path('app_user_edit', {'id': user.idUser}) }}" class="btn btn-primary btn-sm">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col text-center">
+                <p>No users found.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+{# {% extends 'base.html.twig' %}
+
+{% block title %}User Index{% endblock %}
+
+{% block body %}
+<div class="index-page">
+    <h1 class="text-center">User Index</h1>
+
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Phone Number</th>
+                <th>Role</th>
+                <th>Date of Birth</th>
+                <th>Photo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.idUser }}</td>
+                <td>{{ user.nomUser }}</td>
+                <td>{{ user.prenomUser }}</td>
+                <td>{{ user.emailUser }}</td>
+                <td>{{ user.motdepasseUser }}</td>
+                <td>{{ user.numtelephoneUser }}</td>
+                <td>{{ user.roleUser.value }}</td>
+                <td>{{ user.datenaissanceUser ? user.datenaissanceUser|date('Y-m-d') : '' }}</td>
+                <td>{{ user.photoUser }}</td>
+                <td class="action-buttons">
+                    <a href="{{ path('app_user_show', {'id': user.idUser}) }}" class="btn btn-outline-info btn-sm">Show</a>
+                    <a href="{{ path('app_user_edit', {'id': user.idUser}) }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10" class="text-center">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_user_new') }}" class="btn btn-success">Create New User</a>
+    </div>
+</div>
+{% endblock %}
+ #}
+
+{# <form method="get" action="{{ path('app_user_filter') }}" class="mb-4">
+    <div class="row">
+        <div class="col-md-6">
+            <select name="role" class="form-control">
+                <option value="" {% if selectedRole is empty %}selected{% endif %}>All Roles</option>
+                <option value="STUDENT" {% if selectedRole == 'STUDENT' %}selected{% endif %}>Student</option>
+                <option value="TEACHER" {% if selectedRole == 'TEACHER' %}selected{% endif %}>Teacher</option>
+                <option value="ADMIN" {% if selectedRole == 'ADMIN' %}selected{% endif %}>Admin</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form> #}

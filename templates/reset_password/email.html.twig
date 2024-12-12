@@ -1,0 +1,9 @@
+<p>Hello,</p>
+
+<p>You requested a password reset. Click the link below to reset your password:</p>
+
+<p><a href="{{ url('app_reset_password', {token: resetToken.token}) }}">Reset Password</a></p>
+
+<p>This link will expire in {{ resetToken.expiryMessageKey|trans(resetToken.expiryMessageData, 'ResetPasswordBundle') }}.</p>
+
+<p>If you did not request a password reset, please ignore this email.</p>

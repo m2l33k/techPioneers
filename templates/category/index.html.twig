@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category Index{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <h1 class="text-center mb-4">Category Index</h1>
+
+    <div class="text-end mb-3">
+        <a href="{{ path('app_category_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Create New Category
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for category in categories %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category.nomCategory }}</h5>
+                        <p class="card-text">Category ID: {{ category.idCategory }}</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{{ path('app_category_show', {'idCategory': category.idCategory}) }}" class="btn btn-info btn-sm">
+                            <i class="bi bi-eye"></i> Show
+                        </a>
+                        <a href="{{ path('app_category_edit', {'idCategory': category.idCategory}) }}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col text-center">
+                <p>No categories found.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

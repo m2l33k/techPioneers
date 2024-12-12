@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center">Welcome to Your Dashboard</h1>
+
+    <div class="row mt-4">
+        <!-- Card 1: Users -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Users</h5>
+                    <p class="card-text">Manage your users and their profiles.</p>
+                    <a href="{{ path('app_user_index') }}" class="btn btn-primary">View Users</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Courses -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Courses</h5>
+                    <p class="card-text">View and manage all available courses.</p>
+                    <a href="{{ path('app_cours_index') }}" class="btn btn-success">View Courses</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Ressources -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Ressources</h5>
+                    <p class="card-text">Check and update learning resources.</p>
+                    <a href="{{ path('app_ressource_index') }}" class="btn btn-warning">View Ressources</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Card 4: Evenement -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Evenement</h5>
+                    <p class="card-text">Check and update events.</p>
+                    <a href="{{ path('app_evenement_index') }}" class="btn btn-info">View Evenement</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: Forum -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Forum</h5>
+                    <p class="card-text">Participate in discussions and forums.</p>
+                    <a href="{{ path('app_forum_index') }}" class="btn btn-dark">View Forum</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6: Reclamation -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Reclamation</h5>
+                    <p class="card-text">Submit and manage your reclamations.</p>
+                    <a href="{{ path('app_reclamation_index') }}" class="btn btn-danger">View Reclamation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mt-4">
+        <!-- Card 4: Evenement -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Category</h5>
+                    <p class="card-text">Check and update Category.</p>
+                    <a href="{{ path('app_category_index') }}" class="btn btn-info">View Category</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: Forum -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">statistique</h5>
+                    <p class="card-text">Check stat</p>
+                    <a href="{{ path('app_stat_index') }}" class="btn btn-dark">View stat</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6: Reclamation -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Testimonial</h5>
+                    <p class="card-text">Check Testimonial</p>
+                    <a href="{{ path('app_Testimonial') }}" class="btn btn-danger">View Testimonial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All Events{% endblock %}
+
+{% block body %}
+<h1>Evenement index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdEvenement</th>
+                <th>Titre_Evenement</th>
+                <th>Date_Evenement</th>
+                <th>Description_Evenement</th>
+                <th>Organisateur_Evenement</th>
+                <th>Lien_Evenement</th>
+                <th>Lieu_Evenement</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for evenement in evenements %}
+            <tr>
+                <td>{{ evenement.idEvenement }}</td>
+                <td>{{ evenement.TitreEvenement }}</td>
+                <td>{{ evenement.DateEvenement ? evenement.DateEvenement|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ evenement.DescriptionEvenement }}</td>
+                <td>{{ evenement.OrganisateurEvenement }}</td>
+                <td>{{ evenement.lienEvenement }}</td>
+                <td>{{ evenement.LieuEvenement }}</td>
+                <td>
+                    <a href="{{ path('app_evenement_show', {'idEvenement': evenement.idEvenement}) }}">show</a>
+                    <a href="{{ path('app_evenement_edit', {'idEvenement': evenement.idEvenement}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{# <div class="container mt-5">
+    <h1 class="text-center mb-5">Upcoming Events</h1>
+
+    {% if evenements is not empty %}
+        <div class="row">
+            {% for evenement in evenements %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ evenement.titreEvenement }}</h5>
+                            <p class="card-text">{{ evenement.descriptionEvenement|slice(0, 100) }}...</p>
+                            <p><strong>Date:</strong> {{ evenement.dateEvenement|date('Y-m-d H:i') }}</p>
+                            <p><strong>Location:</strong> {{ evenement.lieuEvenement }}</p>
+                            <a href="{{ path('app_evenement_show', { idEvenement: evenement.idEvenement }) }}" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-muted">No events available at the moment.</p>
+    {% endif %} #}
+</div>
+{% endblock %}
