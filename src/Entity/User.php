@@ -23,14 +23,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255, unique: true)] // Added username field with unique constraint
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $username = null;
 
     /**
      * @var list<string> The user roles
      */
-    #[ORM\Column]
-    private array $roles = ['ROLE_STUDENT'];
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -55,7 +55,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // Getter and Setter for the username field
     public function getUsername(): ?string
     {
         return $this->username;
@@ -75,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username; // Return username as the identifier
+        return (string) $this->username;
     }
 
     /**
@@ -86,8 +85,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        // Guarantee every user has at least ROLE_STUDENT
+        if (empty($roles)) {
+            $roles[] = 'ROLE_STUDENT';
+        }
 
         return array_unique($roles);
     }
@@ -122,7 +123,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // Clear any sensitive temporary data if stored
     }
 }

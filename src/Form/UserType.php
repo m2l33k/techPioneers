@@ -11,47 +11,51 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\CallbackTransformer;
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // Add the username field
             ->add('username', TextType::class, [
                 'label' => 'Username',
-                'attr' => ['placeholder' => 'Enter username']
+                'attr' => ['placeholder' => 'Enter username'],
             ])
-
-            // Add the email field with EmailType for better validation
             ->add('email', EmailType::class, [
                 'label' => 'Email Address',
-                'attr' => ['placeholder' => 'Enter email address']
+                'attr' => ['placeholder' => 'Enter email address'],
             ])
-
-            // Add the password field with some placeholder text
             ->add('password', PasswordType::class, [
                 'label' => 'Password',
-                'attr' => ['placeholder' => 'Enter password']
+                'attr' => ['placeholder' => 'Enter password'],
             ])
-
-            // Use a single hidden field to set the role as 'ROLE_USER'
             ->add('roles', ChoiceType::class, [
                 'label' => 'Roles',
                 'choices' => [
-                    'User' => 'ROLE_USER',
+                    'Student' => 'ROLE_STUDENT',
+                    'Teacher' => 'ROLE_TEACHER',
                 ],
-                'multiple' => false, // Only one role can be selected
-                'expanded' => false, // Display as a single option
-                'data' => 'ROLE_USER', // Set default value as 'ROLE_USER'
-                'disabled' => true, // Disable the role selection, making it fixed
+                'multiple' => false, // Single role selection
+                'expanded' => false, // Dropdown
+                'data' => 'ROLE_STUDENT', // Default role
             ])
-
-            // Submit button
             ->add('save', SubmitType::class, [
                 'label' => 'Save',
-                'attr' => ['class' => 'btn btn-primary']
+                'attr' => ['class' => 'btn btn-primary'],
             ]);
+
+        // Apply the transformer directly to the 'roles' field
+        $builder->get('roles')->addModelTransformer(new CallbackTransformer(
+            function ($rolesAsArray) {
+                // Transform array to string
+                return $rolesAsArray[0] ?? null;
+            },
+            function ($rolesAsString) {
+                // Transform string back to array
+                return [$rolesAsString];
+            }
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
