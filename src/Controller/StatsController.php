@@ -1,7 +1,13 @@
 <?php
 
 namespace App\Controller;
-
+use App\Repository\EvenementRepository;
+use App\Form\EvenementType;
+use App\Repository\EventRepository;
+use App\Repository\UserRepository;
+use App\Repository\ForumRepository;
+use App\Repository\CoursRepository;
+use App\Repository\RessourceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

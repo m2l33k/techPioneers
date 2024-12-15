@@ -2,48 +2,29 @@
 
 namespace App\Entity;
 
-use App\Entity\Evenement;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
+#[ORM\Table(name: "category")]
 class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "Id_category", type: "integer")]
-    private ?int $idCategory = null;
+    #[ORM\Column(name: "idCategory", type: "integer")]
+    private int $idCategory;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "nomCategory", type: "string", length: 255)]
+    #[Assert\NotBlank(message: "Le nom de la catégorie ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le nom de la catégorie ne doit pas dépasser {{ limit }} caractères."
+    )]
     private string $nomCategory;
 
-    #[ORM\ManyToOne(targetEntity: Evenement::class)]
-    #[ORM\JoinColumn(name: "idEvenement", referencedColumnName: "idEvenement", nullable: false)]
-    private Evenement $evenement;
-
-    public function getIdEvenement(): ?int
-    {
-        return $this->evenement->getidEvenement();
-    }
-    public function getEvenement(): Evenement
-    {
-        return $this->evenement;
-    }
-    
-    public function setEvenement(Evenement $evenement): self
-    {
-        $this->evenement = $evenement;
-        return $this;
-    }
-
-    public function getIdCategory(): ?int
+    public function getIdCategory(): int
     {
         return $this->idCategory;
-    }
-
-    public function setIdCategory(?int $idCategory): self
-    {
-        $this->idCategory = $idCategory;
-        return $this;
     }
 
     public function getNomCategory(): string
@@ -51,12 +32,9 @@ class Category
         return $this->nomCategory;
     }
 
-    public function setNomCategory(string $nomCategory): self
+    public function setNomCategory(string $nomCategory): static
     {
         $this->nomCategory = $nomCategory;
         return $this;
     }
-
-
 }
-

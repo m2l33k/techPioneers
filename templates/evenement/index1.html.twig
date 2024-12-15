@@ -4,52 +4,32 @@
 
 {% block body %}
 <div class="container my-4">
-    <h1 class="text-center mb-4">Evenement</h1>
+    <h1 class="text-center mb-4">Evenement </h1>
 
-    <!-- Formulaire de recherche -->
-    <div class="mb-4">
-        {{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
-            <div class="col-md-4">
-                {{ form_row(form.Titre_Evenement, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher par titre'}}) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_row(form.Date_Evenement, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_row(form.Lieu_Evenement, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher par lieu'}}) }}
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Rechercher</button>
-            </div>
-        {{ form_end(form) }}
-    </div>
-
-    <!-- Bouton pour créer un nouvel événement -->
     <div class="text-end mb-3">
         <a href="{{ path('app_evenement_new') }}" class="btn btn-success">
             <i class="bi bi-plus-circle"></i> Create New Event
         </a>
     </div>
 
-    <!-- Liste des événements -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for evenement in evenements %}
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    <!-- Image de l'événement -->
+                    <!-- Event Image -->
                     <img 
-                        src="{{ asset('./img/upcoming-events-png-226737-events-png-1679830-free-cliparts-events-png-920_868-3432046203.png') }}" 
+                        src="{{asset('./img/upcoming-events-png-226737-events-png-1679830-free-cliparts-events-png-920_868-3432046203.png') }}" 
                         class="card-img-top" 
                         alt="{{ evenement.TitreEvenement }}" 
                         style="height: 200px; object-fit: cover;"
                     >
 
-                    <!-- En-tête de l'événement -->
+                    <!-- Event Header -->
                     <div class="card-header bg-primary text-white">
                         <h5 class="card-title">{{ evenement.TitreEvenement }}</h5>
                     </div>
 
-                    <!-- Corps de la carte -->
+                    <!-- Event Body -->
                     <div class="card-body">
                         <p class="card-text">
                             <strong>Date:</strong> {{ evenement.DateEvenement ? evenement.DateEvenement|date('Y-m-d H:i:s') : 'N/A' }}<br>
@@ -62,7 +42,7 @@
                         {% endif %}
                     </div>
 
-                    <!-- Pied de carte -->
+                    <!-- Card Footer -->
                     <div class="card-footer text-center">
                         <a href="{{ path('app_evenement_show', {'idEvenement': evenement.idEvenement}) }}" class="btn btn-info btn-sm">
                             <i class="bi bi-eye"></i> Show

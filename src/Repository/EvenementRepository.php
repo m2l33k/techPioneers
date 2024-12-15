@@ -16,28 +16,63 @@ class EvenementRepository extends ServiceEntityRepository
         parent::__construct($registry, Evenement::class);
     }
 
-    //    /**
-    //     * @return Evenement[] Returns an array of Evenement objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Méthode pour récupérer tous les événements (si nécessaire)
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Evenement
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Méthode de recherche avancée
+     *
+     * @param array $criteria
+     * @return Evenement[]
+     */
+    public function search(array $criteria): array
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        // Critère : Titre de l'événement
+        if (!empty($criteria['Titre_Evenement'])) {
+            $qb->andWhere('e.Titre_Evenement LIKE :titre')
+               ->setParameter('titre', '%' . $criteria['Titre_Evenement'] . '%');
+        }
+
+        // Critère : Date de l'événement
+        if (!empty($criteria['Date_Evenement'])) {
+            $qb->andWhere('e.Date_Evenement = :date')
+               ->setParameter('date', $criteria['Date_Evenement']);
+        }
+
+        // Critère : Description de l'événement
+        if (!empty($criteria['Description_Evenement'])) {
+            $qb->andWhere('e.Description_Evenement LIKE :description')
+               ->setParameter('description', '%' . $criteria['Description_Evenement'] . '%');
+        }
+
+        // Critère : Organisateur
+        if (!empty($criteria['Organisateur_Evenement'])) {
+            $qb->andWhere('e.Organisateur_Evenement LIKE :organisateur')
+               ->setParameter('organisateur', '%' . $criteria['Organisateur_Evenement'] . '%');
+        }
+
+        // Critère : Lieu de l'événement
+        if (!empty($criteria['Lieu_Evenement'])) {
+            $qb->andWhere('e.Lieu_Evenement LIKE :lieu')
+               ->setParameter('lieu', '%' . $criteria['Lieu_Evenement'] . '%');
+        }
+
+        // Critère : Catégorie
+        if (!empty($criteria['category'])) {
+            $qb->andWhere('e.category = :category')
+               ->setParameter('category', $criteria['category']);
+        }
+
+        // Retourner les résultats
+        return $qb->getQuery()->getResult();
+    }
 }

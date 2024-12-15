@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EvenementRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 #[ORM\Table(name: "evenement")]
@@ -15,33 +16,57 @@ class Evenement
     private int $idEvenement;
 
     #[ORM\Column(length: 255)]
-    private string $Titre_Evenement; // Non null
+    #[Assert\NotBlank(message: "Le titre de l'événement est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le titre de l'événement ne peut pas dépasser {{ limit }} caractères."
+    )]
+    private string $Titre_Evenement;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $Date_Evenement; // Non null
+    #[Assert\NotNull(message: "La date de l'événement est obligatoire.")]
+    #[Assert\Type(
+        type: \DateTimeInterface::class,
+        message: "La date doit être une date valide."
+    )]
+    private \DateTimeInterface $Date_Evenement;
 
     #[ORM\Column(type: 'text')]
-    private string $Description_Evenement; // Non null
+    #[Assert\NotBlank(message: "La description de l'événement est obligatoire.")]
+    private string $Description_Evenement;
 
     #[ORM\Column(length: 255)]
-    private string $Organisateur_Evenement; // Non null
+    #[Assert\NotBlank(message: "Le nom de l'organisateur est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le nom de l'organisateur ne peut pas dépasser {{ limit }} caractères."
+    )]
+    private string $Organisateur_Evenement;
 
     #[ORM\Column(length: 255)]
-    private string $lien_Evenement; // Non null
+    #[Assert\NotBlank(message: "Le lien de l'événement est obligatoire.")]
+    #[Assert\Url(message: "Le lien doit être une URL valide.")]
+    private string $lien_Evenement;
 
-    #[ORM\Column(length: 255)]
-    private string $Lieu_Evenement;
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le lieu de l'événement ne peut pas dépasser {{ limit }} caractères."
+    )]
+    private ?string $Lieu_Evenement = null;
 
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(name: "idCategory", referencedColumnName: "idCategory", nullable: false)]
+    #[Assert\NotNull(message: "La catégorie de l'événement est obligatoire.")]
+    private Category $category;
 
-    public function getId(): int
-    {
-        return $this->getIdEvenement();
-    }
+    // Getters et Setters
+
     public function getIdEvenement(): int
     {
         return $this->idEvenement;
     }
-    
+
     public function setIdEvenement(int $idEvenement): static
     {
         $this->idEvenement = $idEvenement;
@@ -103,14 +128,25 @@ class Evenement
         return $this;
     }
 
-    public function getLieuEvenement(): string
+    public function getLieuEvenement(): ?string
     {
         return $this->Lieu_Evenement;
     }
 
-    public function setLieuEvenement(string $Lieu_Evenement): static
+    public function setLieuEvenement(?string $Lieu_Evenement): static
     {
         $this->Lieu_Evenement = $Lieu_Evenement;
+        return $this;
+    }
+
+    public function getCategory(): Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category): static
+    {
+        $this->category = $category;
         return $this;
     }
 }

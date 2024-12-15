@@ -3,16 +3,11 @@
 {% block title %}Edit Category{% endblock %}
 
 {% block body %}
-<div class="edit-page">
-    <h1 class="text-center">Edit Category</h1>
+    <h1>Edit Category</h1>
 
-    <div class="form-container">
-        {{ include('category/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('category/_form.html.twig', {'button_label': 'Update'}) }}
 
-        <div class="form-actions text-center">
-            <a href="{{ path('app_category_index') }}" class="btn btn-secondary">Back to List</a>
-            {{ include('category/_delete_form.html.twig', {'button_class': 'btn btn-danger'}) }}
-        </div>
-    </div>
-</div>
+    <a href="{{ path('app_category_index') }}">back to list</a>
+
+    {{ include('category/_delete_form.html.twig') }}
 {% endblock %}
