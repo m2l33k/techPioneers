@@ -68,7 +68,7 @@
                     <div class="dropdown-menu fade-down m-0">
                          <a href="{{path('app_team')}}" class="dropdown-item">Our Team</a>
                         <a href="{{path('app_Testimonial')}}" class="dropdown-item">Testimonial</a>
-                        <a href="{{path('app_contact')}}" class="nav-item nav-link">Contact</a>
+                        <a href="{{path('app_contact')}}" class="dropdown-item">Contact</a>
                         </div>
                         </div>
                         
@@ -78,10 +78,10 @@
                 
                 {% if app.user %}
             <!-- Affiche le bouton de déconnexion si l'utilisateur est connecté -->
-            <a href="{{ path('app_logout') }}" class="btn btn-danger px-4">Logout</a>
+            <a href="{{ path('app_logout') }}" class="nav-item nav-link">Logout</a>
           {% else %}
             <!-- Affiche le bouton de connexion si l'utilisateur n'est pas connecté -->
-            <a href="{{ path('app_login') }}" class="btn btn-primary px-4">Sign in</a>
+            <a href="{{ path('app_login') }}" class="nav-item nav-link">Sign in</a>
           {% endif %}
             </div>
             {# <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a> #}

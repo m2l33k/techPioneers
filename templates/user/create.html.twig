@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create User{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center">Create New User</h1>
+        
+        <!-- Start the form -->
+        {{ form_start(form) }}
+
+        <!-- Username field -->
+        <div class="mb-3">
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder': 'Enter username'}}) }}
+            {{ form_errors(form.username) }}
+        </div>
+
+        <!-- Email field -->
+        <div class="mb-3">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter email address'}}) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <!-- Password field -->
+        <div class="mb-3">
+            {{ form_label(form.password) }}
+            {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter password'}}) }}
+            {{ form_errors(form.password) }}
+        </div>
+
+        <!-- Roles field (not editable, set to ROLE_USER by default) -->
+        <div class="mb-3">
+            {{ form_label(form.roles) }}
+            {{ form_widget(form.roles, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+            {{ form_errors(form.roles) }}
+        </div>
+
+        <!-- Save button -->
+        <div class="text-center">
+            <button class="btn btn-success">Save</button>
+        </div>
+
+        <!-- End the form -->
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

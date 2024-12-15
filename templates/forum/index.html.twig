@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum Index{% endblock %}
+
+{% block body %}
+<div class="index-page">
+    <h1 class="text-center">Forum Index</h1>
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Creator</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for forum in forums %}
+            <tr>
+                <td>{{ forum.idForum }}</td>
+                <td>{{ forum.titreForum }}</td>
+                <td>{{ forum.descriptionForum }}</td>
+                <td>{{ forum.createurForum }}</td>
+                <td class="action-buttons">
+                    <a href="{{ path('app_forum_show', {'idForum': forum.idForum}) }}" class="btn btn-outline-info btn-sm">Show</a>
+                    <a href="{{ path('app_forum_edit', {'idForum': forum.idForum}) }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                    {{ include('forum/_delete_form.html.twig', {'button_class': 'btn btn-outline-danger btn-sm'}) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No forums found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a href="{{ path('app_forum_new') }}" class="btn btn-success">Create New Forum</a>
+    </div>
+</div>
+{% endblock %}

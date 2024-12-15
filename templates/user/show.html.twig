@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}View User{% endblock %}
+
+{% block body %}
+    <h1>View User</h1>
+    <p>Email: {{ user.email }}</p>
+    <p>Roles: {{ user.roles|join(', ') }}</p>
+    <a href="{{ path('user_edit', { 'id': user.id }) }}" class="btn btn-warning">Edit</a>
+    <a href="{{ path('user_delete', { 'id': user.id }) }}" class="btn btn-danger">Delete</a>
+{% endblock %}

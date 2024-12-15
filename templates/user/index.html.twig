@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User List{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center">User List</h1>
+        <a href="{{ path('user_create') }}" class="btn btn-success mb-3">Create New User</a>
+        
+        <!-- User Table -->
+        <table class="table table-bordered mt-4">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Username</th> <!-- Added Username -->
+                    <th>Roles</th> <!-- Added Roles -->
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td> <!-- Displaying the Username -->
+                        <td>{{ user.roles | join(', ') }}</td> <!-- Displaying the Roles -->
+                        <td>
+                            <!-- View, Edit, Delete buttons -->
+                            <a href="{{ path('user_show', { 'id': user.id }) }}" class="btn btn-info btn-sm">View</a>
+                            <a href="{{ path('user_edit', { 'id': user.id }) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <!-- Delete Button with Confirmation -->
+                            <form action="{{ path('user_delete', { 'id': user.id }) }}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
