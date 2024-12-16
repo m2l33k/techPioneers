@@ -58,12 +58,14 @@ class PageController extends AbstractController
     #[Route('/Root', name: 'app_Root')]
     public function root(): Response
     {
+      $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('page/Dashboard.html.twig',);
     }
 
     #[Route('/Teacher', name: 'app_Root1')]
     public function teacher(): Response
     {
+      $this->denyAccessUnlessGranted('ROLE_TEACHER');
         return $this->render('page/Dashboard1.html.twig',);
     }
 
