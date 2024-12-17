@@ -35,7 +35,7 @@ class Ressource
     private \DateTimeInterface $DateCreation_Ressource;
 
     #[ORM\ManyToOne(targetEntity: Cours::class)]
-    #[ORM\JoinColumn(name: "Id_Cours", referencedColumnName: "Id_Cours", nullable: false)]
+    #[ORM\JoinColumn(name: "Id_Cours", referencedColumnName: "Id_Cours", nullable: false, onDelete: "CASCADE")]
     private Cours $Id_Cours;
 
     

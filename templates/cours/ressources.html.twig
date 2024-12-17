@@ -1,0 +1,28 @@
+<!-- ressources.html.twig -->
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Ressources du Cours: {{ cours.TitreCours }}{% endblock %}
+
+{% block body %}
+    <h1>Ressources du Cours: {{ cours.TitreCours }}</h1>
+
+    <div class="row">
+        {% for ressource in ressources %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('img/ressimg1.jpg') }}" class="card-img-top" alt="Image de la ressource" style="height: 150px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ ressource.TitreRessource }}</h6>
+                        <p class="card-text">{{ ressource.DescriptionRessource|slice(0, 100) }}...</p>
+                        <a href="{{ ressource.UrlRessource }}" class="btn btn-primary" target="_blank">Voir la ressource</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucune ressource trouvée pour ce cours.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{{ path('app_cours_index') }}" class="btn btn-secondary">Retour à la liste des cours</a>
+{% endblock %}

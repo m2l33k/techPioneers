@@ -1,36 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Cours{% endblock %}
+{% block title %}Détails du Cours{% endblock %}
 
 {% block body %}
-    <h1>Cours</h1>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Détails du Cours</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>ID</th>
-                <td>{{ cour.idCours }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ cour.titreCours }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ cour.descriptioCours }}</td>
-            </tr>
-            <tr>
-                <th>Instructor ID</th>
-                <td>{{ cour.idEnseignantCours }}</td>
-            </tr>
-            <tr>
-                <th>Creation Date</th>
-                <td>{{ cour.dateCreationCours ? cour.dateCreationCours|date('Y-m-d H:i:s') : 'Not set' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- Table des détails du cours avec un style moderne -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <td>{{ cour.idCours }}</td>
+                        </tr>
+                        <tr>
+                            <th>Titre</th>
+                            <td>{{ cour.titreCours }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ cour.descriptioCours }}</td>
+                        </tr>
+                        <tr>
+                            <th>ID Enseignant</th>
+                            <td>{{ cour.idEnseignantCours }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de Création</th>
+                            <td>{{ cour.dateCreationCours ? cour.dateCreationCours|date('Y-m-d H:i:s') : 'Non définie' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <a href="{{ path('app_cours_index') }}" class="btn btn-primary">Back to list</a>
-    <a href="{{ path('app_cours_edit', {'Id_Cours': cour.idCours}) }}" class="btn btn-warning">Edit</a>
-    {{ include('cours/_delete_form.html.twig') }}
+        <div class="d-flex justify-content-center mt-4">
+            <!-- Bouton Retour à la liste -->
+            <a href="{{ path('app_cours_index') }}" class="btn btn-success btn-lg mx-2 px-4 py-2">
+                <i class="bi bi-arrow-left-circle"></i> Retour à la liste
+            </a>
+            
+            <!-- Bouton Editer -->
+            <a href="{{ path('app_cours_edit', {'Id_Cours': cour.idCours}) }}" class="btn btn-warning btn-lg mx-2 px-4 py-2">
+                <i class="bi bi-pencil-square"></i> Éditer
+            </a>
+     
+            <!-- Formulaire de suppression -->
+            {{ include('cours/_delete_form.html.twig') }}
+        </div>
+    </div>
 {% endblock %}

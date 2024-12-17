@@ -15,11 +15,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class RessourceController extends AbstractController
 {
     #[Route(name: 'app_ressource_index', methods: ['GET'])]
-    public function index(RessourceRepository $ressourceRepository): Response
+    public function index(RessourceRepository $ressourceRepository,Request $request): Response
     {
-        return $this->render('ressource/index.html.twig', [
-            'ressources' => $ressourceRepository->findAll(),
-        ]);
+      // Récupère le paramètre de recherche du titre de la ressource
+      $titreRessource = $request->query->get('titreRessource');
+
+      // Si un titre est fourni, effectue la recherche
+      if ($titreRessource) {
+          $ressources = $ressourceRepository->findByTitreRessource($titreRessource);
+      } else {
+          $ressources = $ressourceRepository->findAll();  // Sinon, récupère toutes les ressources
+      }
+      $this->denyAccessUnlessGranted('ROLE_TEACHER');
+      return $this->render('ressource/index.html.twig', [
+          'ressources' => $ressources,
+      ]);
     }
 
     #[Route('/new', name: 'app_ressource_new', methods: ['GET', 'POST'])]
@@ -44,7 +54,7 @@ final class RessourceController extends AbstractController
         ]);
     }
 
-    #[Route('/{idRessource}', name: 'app_ressource_show', methods: ['GET'])]
+    #[Route('/{Id_Ressource}', name: 'app_ressource_show', methods: ['GET'])]
     public function show(Ressource $ressource): Response
     {
         return $this->render('ressource/show.html.twig', [
@@ -52,32 +62,46 @@ final class RessourceController extends AbstractController
         ]);
     }
 
-    #[Route('/{idRessource}/edit', name: 'app_ressource_edit', methods: ['GET', 'POST'])]
+    #[Route('/{Id_Ressource}/edit', name: 'app_ressource_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ressource $ressource, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(RessourceType::class, $ressource);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-    
-            return $this->redirectToRoute('app_ressource_index');
+
+            return $this->redirectToRoute('app_ressource_index', [], Response::HTTP_SEE_OTHER);
         }
-    
+
         return $this->render('ressource/edit.html.twig', [
             'ressource' => $ressource,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
     #[Route('/{Id_Ressource}', name: 'app_ressource_delete', methods: ['POST'])]
     public function delete(Request $request, Ressource $ressource, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$ressource->getId_Ressource(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$ressource->getIdRessource(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($ressource);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_ressource_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/student/ressources', name: 'student_ressource_index', methods: ['GET'])]
+    public function index2(RessourceRepository $ressourceRepository, Request $request): Response
+    {
+        $titreRessource = $request->query->get('titreRessource');
+    
+        $ressources = $titreRessource 
+            ? $ressourceRepository->findByTitreRessource($titreRessource) 
+            : $ressourceRepository->findAll();
+            $this->denyAccessUnlessGranted('ROLE_STUDENT');
+        return $this->render('ressource/index2.html.twig', [
+            'ressources' => $ressources,
+        ]);
     }
 }

@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cours index{% endblock %}
+
+{% block body %}
+     <h1 class="page-title">COURSES</h1> <!-- Titre stylisé -->
+
+    <!-- Formulaire de recherche -->
+   <!-- Formulaire de recherche -->
+    <form method="get" action="{{ path('app_cours_index2') }}" class="mb-4" style="max-width: 50%; margin: 0 auto;">
+        <div class="input-group mb-3">
+            <input 
+                type="text" 
+                name="search" 
+                class="form-control" 
+                placeholder="Search by course title..." 
+                value="{{ searchTerm|default('') }}" 
+            />
+            <button type="submit" class="btn btn-success">Rechercher</button>
+        </div>
+    </form>
+      <!-- Barre de navigation avec icône et survol -->
+        <div class="btn-group" role="group" aria-label="Cours navigation">    
+            <!-- Bouton "Ressource" avec icône et effet moderne -->
+            <a href="{{ path('app_ressource_index') }}" class="btn btn-primary rounded-pill px-4 py-2" style="background-color: #4eadba; color: white;  padding: 10px 20px;">
+                <i class="bi bi-folder"style="color: white;"></i> Ressource
+            </a>
+        </div>
+    </div>
+
+    <!-- Affichage des cours -->
+    <div class="row row-cols-1 row-cols-md-3 g-4"> 
+        {% for cour in cours %}
+            <div class="col mb-4">
+                <div class="card" style="height: 100%;"> 
+                    <!-- Image statique pour chaque cours -->
+                    <img src="{{ asset('img/cours1.jpg') }}" class="card-img-top" alt="Image du cours" style="object-fit: cover; height: 180px;"> 
+                    
+                    <div class="card-body">
+                        <!-- Titre du cours -->
+                        <h5 class="card-title" style="font-size: 1.2rem;">{{ cour.TitreCours }}</h5>
+                        
+                        <!-- Description réduite -->
+                        <p class="card-text" style="font-size: 0.9rem;">{{ cour.DescriptioCours|slice(0, 100) }}...</p>
+                        
+                        <!-- Lien vers les détails du cours -->
+                        <a href="{{ path('app_cours_index2', {'Id_Cours': cour.IdCours}) }}" class="btn btn-primary">Voir les Détails</a>
+                        <a href="{{ path('app_cours_index2') }}" class="btn btn-success">Participer</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun cours trouvé.</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+{% block stylesheets %}
+    <style>
+        /* Style pour le titre COURSES */
+        .page-title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Police moderne */
+            font-size: 3rem; /* Taille plus grande */
+            font-weight: 600; /* Gras */
+            color: #4CAF50; /* Couleur verte */
+            text-align: center; /* Centré */
+            text-transform: uppercase; /* En majuscules */
+            letter-spacing: 2px; /* Espacement entre les lettres */
+            margin-top: 30px; /* Espacement en haut */
+            margin-bottom: 30px; /* Espacement en bas */
+            border-bottom: 3px solid #4CAF50; /* Ligne en dessous */
+            padding-bottom: 10px; /* Espacement entre le texte et la ligne */
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+        }
+    </style>
+{% endblock %}

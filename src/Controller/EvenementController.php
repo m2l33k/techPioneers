@@ -93,4 +93,29 @@ final class EvenementController extends AbstractController
 
         return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+    #[Route( name: 'app_evenement_index2', methods: ['GET', 'POST'])]
+    public function index2(Request $request, EvenementRepository $evenementRepository): Response
+    {
+        // Créez le formulaire de recherche
+        $form = $this->createForm(EvenementSearchType::class);
+        $form->handleRequest($request);
+
+        // Par défaut, affichez tous les événements
+        $evenements = $evenementRepository->findAll();
+
+        // Si le formulaire est soumis et valide, effectuez une recherche
+        if ($form->isSubmitted() && $form->isValid()) {
+            $criteria = $form->getData();
+            $evenements = $evenementRepository->search($criteria);
+        }
+
+        return $this->render('evenement/index1.html.twig', [
+
+            'evenements' => $evenements,
+        ]);
+    }
+
 }

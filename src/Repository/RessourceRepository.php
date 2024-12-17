@@ -15,7 +15,16 @@ class RessourceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ressource::class);
     }
-
+    
+   // Méthode pour chercher les ressources par leur titre
+   public function findByTitreRessource(string $titreRessource)
+   {
+       return $this->createQueryBuilder('r')
+           ->where('LOWER(r.Titre_Ressource) LIKE LOWER(:titreRessource)')
+           ->setParameter('titreRessource', '%' . $titreRessource . '%')
+           ->getQuery()
+           ->getResult();
+   }
     //    /**
     //     * @return Ressource[] Returns an array of Ressource objects
     //     */

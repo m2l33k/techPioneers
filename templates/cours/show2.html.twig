@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cours{% endblock %}
+
+{% block body %}
+    <h1>Courses</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID</th>
+                <td>{{ cour.idCours }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ cour.titreCours }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ cour.descriptioCours }}</td>
+            </tr>
+            <tr>
+                <th>Instructor ID</th>
+                <td>{{ cour.idEnseignantCours }}</td>
+            </tr>
+            <tr>
+                <th>Creation Date</th>
+                <td>{{ cour.dateCreationCours ? cour.dateCreationCours|date('Y-m-d H:i:s') : 'Not set' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+     <a href="{{ path('app_cours_index2') }}" class="btn btn-primary">Back to list</a>
+   
+        
+    
+{% endblock %}

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Cours;
 use App\Form\CoursType;
+use App\Repository\RessourceRepository;
 use App\Repository\CoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,6 +48,7 @@ final class CoursController extends AbstractController
     {
         return $this->render('cours/show.html.twig', [
             'cour' => $cour,
+           /* 'isBackoffice' => true,*/ 
         ]);
     }
 
@@ -58,6 +60,8 @@ final class CoursController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            // Ajout d'un message flash
+        $this->addFlash('success', 'Le cours a été modifié avec succès.');
 
             return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -71,11 +75,71 @@ final class CoursController extends AbstractController
     #[Route('/{Id_Cours}', name: 'app_cours_delete', methods: ['POST'])]
     public function delete(Request $request, Cours $cour, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$cour->getId_Cours(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$cour->getIdCours(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($cour);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
     }
+    // Affiche les ressources liées à un cours
+    #[Route('/{Id_Cours}/ressources', name: 'app_cours_ressources', methods: ['GET'])]
+    public function showRessources(int $Id_Cours, RessourceRepository $ressourceRepository): Response
+    {
+        // Récupérer le cours par son ID
+        $cours = $this->getDoctrine()->getRepository(Cours::class)->find($Id_Cours);
+        
+        // Vérifier si le cours existe
+        if (!$cours) {
+            throw $this->createNotFoundException('Le cours demandé n\'existe pas.');
+        }
+
+        // Récupérer toutes les ressources liées au cours
+        $ressources = $ressourceRepository->findBy(['Id_Cours' => $cours]);
+
+        // Retourner la vue avec les ressources
+        return $this->render('cours/ressources.html.twig', [
+            'cours' => $cours,
+            'ressources' => $ressources,
+        ]);
+    }
+    #[Route('app_cours_index2', methods: ['GET'])]
+    public function index2(Request $request,CoursRepository $coursRepository): Response
+    {
+       // Récupère le terme de recherche s'il existe
+    $searchTerm = $request->query->get('search', '');
+
+    // Si un terme de recherche est fourni, rechercher les cours correspondants, sinon tous les cours
+    $cours = $searchTerm
+        ? $coursRepository->findByTitle($searchTerm) // Méthode custom dans le repository pour rechercher
+        : $coursRepository->findAll(); // Tous les cours si pas de recherche
+
+    return $this->render('cours/index2.html.twig', [
+        'cours' => $cours,
+        'searchTerm' => $searchTerm, // Envoyer le terme de recherche pour le pré-remplir dans le champ
+    ]);
+    }
+   
+   #[Route('/front/{Id_Cours}', name: 'app_cours_show2', methods: ['GET'])]
+    public function show2(Cours $cour): Response
+    {
+      
+        return $this->render('cours/show2.html.twig', [
+            'cour' => $cour,
+        
+            /*'isBackoffice' => false,*/ 
+        ]);
+    }
+    //meth bch pour afficher tous les ressources pour le front 
+    #[Route('/ressources', name: 'app_all_ressources', methods: ['GET'])]
+    public function allRessources(RessourceRepository $ressourceRepository): Response
+    {
+        $ressources = $ressourceRepository->findAll();
+    
+        return $this->render('cours/all_ressources.html.twig', [
+            'ressources' => $ressources,
+        ]);
+    }
+   
+   
 }

@@ -1,38 +1,52 @@
-{% extends 'base.html.twig' %}
+{% extends 'singin.html.twig' %}
 
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+    <!-- Logo -->
+    <div class="mb-4">
+        <img src="https://3.bp.blogspot.com/-Fx-A-Q_0cJ4/W4JrJp_QkbI/AAAAAAAABD8/13fo0W5PPN4kErSOJVGNunVLm052mnS-wCLcBGAs/s1600/hello%2Bkitty%2Bdesign2.jpg" alt="Logo" class="img-fluid" style="max-width: 150px;">
     </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
-<a href="{{ path('app_register') }}">Register</a>
+    <!-- Login Form -->
+    <form method="post" class="w-100" style="max-width: 400px;">
+        {% if error %}
+            <div class="alert alert-danger text-center">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3 text-center">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
+        
+        <div class="mb-3">
+            <label for="inputEmail" class="form-label">Email</label>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+        </div>
+        
+        <div class="mb-3">
+            <label for="inputPassword" class="form-label">Password</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="form-check mb-3">
+            <input type="checkbox" name="_remember_me" class="form-check-input" id="rememberMe">
+            <label for="rememberMe" class="form-check-label">Remember me</label>
+        </div>
+
+        <button class="btn btn-lg btn-primary w-100" type="submit">Sign in</button>
+    </form>
+
+    <div class="text-center mt-4">
+        <p>Don't have an account? <a href="{{ path('app_register') }}">Register</a></p>
+    </div>
+</div>
 {% endblock %}

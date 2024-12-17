@@ -1,23 +1,43 @@
-{% extends 'base.html.twig' %}
+{% extends 'singin.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+    <!-- Logo -->
+    <div class="mb-4">
+        <img src="http://pngimg.com/uploads/hello/hello_PNG14.png" alt="Logo" class="img-fluid" style="max-width: 150px;">
+    </div>
 
-    {{ form_errors(registrationForm) }}
+    <!-- Registration Form -->
+    <form method="post" class="w-100" style="max-width: 400px;">
+        <h1 class="h3 mb-3 font-weight-normal text-center">Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }} <!-- Add the username field -->
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_errors(registrationForm) }}
 
-        <button type="submit" class="btn btn-primary">Register</button>
+        {{ form_start(registrationForm) }}
+            <div class="mb-3">
+                {{ form_row(registrationForm.username, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Password',
+                    attr: {'class': 'form-control'}
+                }) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+            </div>
 
-    {{ form_end(registrationForm) }}
-    <p>
-        Already have an account? <a href="{{ path('app_login') }}">Sign in</a>
+            <button type="submit" class="btn btn-lg btn-primary w-100">Register</button>
+        {{ form_end(registrationForm) }}
+
+        <div class="text-center mt-4">
+            <p>Already have an account? <a href="{{ path('app_login') }}">Sign in</a></p>
+        </div>
+    </form>
+</div>
 {% endblock %}

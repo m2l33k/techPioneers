@@ -66,8 +66,17 @@ class PageController extends AbstractController
     public function teacher(): Response
     {
       $this->denyAccessUnlessGranted('ROLE_TEACHER');
+
         return $this->render('page/Dashboard1.html.twig',);
     }
 
+    #[Route('/Student', name: 'app_Student')]
+    public function STUDENT(): Response
+    {
+      $this->denyAccessUnlessGranted('ROLE_STUDENT');
+        return $this->render('page/STUDENT.html.twig',);
+    }
+
+    
 
 }

@@ -11,6 +11,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CoursRepository extends ServiceEntityRepository
 {
+   public function findByTitle(string $title): array
+{
+    return $this->createQueryBuilder('c')
+        ->andWhere('c.Titre_Cours LIKE :title')
+        ->setParameter('title', '%' . $title . '%')
+        ->orderBy('c.Titre_Cours', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Cours::class);

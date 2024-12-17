@@ -3,9 +3,56 @@
 {% block title %}New Cours{% endblock %}
 
 {% block body %}
-    <h1>Create new Cours</h1>
+    <h1>Cours</h1>
 
-    {{ include('cours/_form.html.twig') }}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5"> <!-- Réduction de la largeur -->
+                <h1 class="text-center mb-4">Create New Cours</h1>
+                
+                <div class="card shadow-sm" style="border-radius: 10px; border: none;">
+                    <div class="card-body">
+                        {{ form_start(form, { 'attr': { 'class': 'form' } }) }}
+                        
+                        {{ form_row(form.Titre_Cours, {
+                            'label': 'Titre du Cours',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        {{ form_row(form.Descriptio_Cours, {
+                            'label': 'Description',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        {{ form_row(form.Id_Enseignant_Cours, {
+                            'label': 'ID Enseignant',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-control mb-3'}
+                        }) }}
+                        
+                        {{ form_row(form.Date_creation_Cours, {
+                            'label': 'Date de création',
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {
+                                'class': 'form-control mb-3',
+                                'type': 'date'
+                            }
+                        }) }}
+                        
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success px-4">Sauvegarder</button>
+                        </div>
+                        
+                        {{ form_end(form) }}
+                    </div>
+                </div>
 
-    <a href="{{ path('app_cours_index') }}">back to list</a>
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_cours_index') }}" class="btn btn-warning px-3">Back to list</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

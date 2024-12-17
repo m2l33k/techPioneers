@@ -24,7 +24,7 @@ class RessourceType extends AbstractType
             'choices' => [
                 'Video' => TypeRessourceEnum::VIDEO, // Replace with your actual enum cases
                 'Document' => TypeRessourceEnum::DOCUMENT,
-                
+                //'Quiz' => TypeRessourceEnum::QUIZ,
             ],
             'choice_label' => function (?TypeRessourceEnum $choice) {
                 return $choice ? $choice->name : ''; // Label is the enum case name

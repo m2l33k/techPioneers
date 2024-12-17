@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center">Consulter les informations de votre compte {{ app.user.userIdentifier }}</h1>
+
+    <div class="row mt-4">
+        <!-- Card 1: Courses -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">votre Courses</h5>
+                    <p class="card-text">View and buy all available courses.</p>
+                    <a href="{{ path('app_cours_index2') }}" class="btn btn-success">View Courses</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Resources -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Resources</h5>
+                    <p class="card-text">View and buy learning resources.</p>
+                    <a href="{{ path('student_ressource_index') }}" class="btn btn-warning">View Resources</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Events -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Events</h5>
+                    <p class="card-text">View and particpate events.</p>
+                    <a href="{{ path('app_evenement_index2') }}" class="btn btn-info">View Events</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Card 4: Forum -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Forum</h5>
+                    <p class="card-text">Participate in discussions and forums.</p>
+                    <a href="{{ path('app_forum_index') }}" class="btn btn-dark">View Forum</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: Reclamation -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Reclamation</h5>
+                    <p class="card-text">Submit and manage your reclamations.</p>
+                    <a href="{{ path('app_reclamation_index') }}" class="btn btn-danger">View Reclamation</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6: Testimonial -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Testimonial</h5>
+                    <p class="card-text">Check Testimonials.</p>
+                    <a href="{{ path('app_Testimonial') }}" class="btn btn-primary">View Testimonials</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mt-4">
+        <!-- Card 7: Forum -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Panier</h5>
+                    <p class="card-text">Consulter Mes Achats</p>
+                    <a href="{{ path('app_forum_index') }}" class="btn btn-dark">View Achat</a>
+                </div>
+            </div>
+        </div>
+
+</div>
+{% endblock %}
