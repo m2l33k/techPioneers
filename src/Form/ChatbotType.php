@@ -6,6 +6,7 @@ use App\Entity\Chatbot;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Service\ChatbotAIService;
 
 class ChatbotType extends AbstractType
 {

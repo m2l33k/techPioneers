@@ -1,0 +1,236 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum{% endblock %}
+
+{% block body %}
+<div class="index-page">
+    <h1 class="text-center my-5 text-primary font-weight-bold">Forum</h1>
+
+    <!-- Filter Form -->
+    <form method="GET" action="{{ path('app_forum_front_index') }}" class="mb-4" id="filterForm">
+        <div class="input-group justify-content-center mb-3">
+            <input type="text" name="query" class="form-control rounded-pill border-0 shadow-sm" placeholder="Search for a forum" value="{{ app.request.query.get('query') }}">
+            
+            <!-- Smaller search button with label "Search" -->
+            <button class="btn btn-primary rounded-pill ms-2" type="submit" id="searchButton">
+                <i class="bi bi-search"></i> Search
+            </button>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+            <!-- Filter by Creator -->
+            <div class="col">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-circle text-muted"></i>
+                    <select name="creator" class="form-control rounded-pill border-0 shadow-sm ms-2" onchange="this.form.submit()">
+                        <option value="">Creator</option>
+                        {% for user in users %}
+                            <option value="{{ user.id }}" {% if app.request.query.get('creator') == user.id %}selected{% endif %}>{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sort by Date -->
+            <div class="col">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-calendar text-muted"></i>
+                    <select name="sortByDate" class="form-control rounded-pill border-0 shadow-sm ms-2" onchange="this.form.submit()">
+                        <option value="">Sort by Date</option>
+                        <option value="recent" {% if app.request.query.get('sortByDate') == 'recent' %}selected{% endif %}>Most Recent</option>
+                        <option value="earlier" {% if app.request.query.get('sortByDate') == 'earlier' %}selected{% endif %}>Most Earlier</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sort by Activity (Most Active) -->
+            <div class="col">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-bar-chart-line text-muted"></i>
+                    <select name="sortByActivity" class="form-control rounded-pill border-0 shadow-sm ms-2" onchange="this.form.submit()">
+                        <option value="">Sort by Activity</option>
+                        <option value="active" {% if app.request.query.get('sortByActivity') == 'active' %}selected{% endif %}>Most Active</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Display Forums -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for forum in forums %}
+            <div class="col">
+                <div class="card shadow-lg border-light rounded-lg overflow-hidden">
+                    <!-- Forum banner with random background color -->
+                    <div class="forum-banner" style="background-color: {{ forum.randomColor }};">
+                        <div class="forum-title-overlay">
+                            <h5 class="card-title text-white">{{ forum.titreForum }}</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ forum.descriptionForum|slice(0, 150) ~ '...' }}</p>
+                        <p class="card-text"><small class="text-muted">Creator: {{ forum.createurForum.username }}</small></p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{{ path('app_forum_front_show', {'idForum': forum.idForum}) }}" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">No forums found.</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{{ path('app_forum_front_new') }}" class="btn btn-success btn-lg rounded-pill shadow-lg">
+            <i class="bi bi-plus-circle"></i> Create New Forum
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    /* General page styling */
+    .index-page {
+        padding: 40px 30px;
+        background-color: #f7f9fc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Title styling */
+    h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #007bff;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Input Group */
+    .input-group {
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    /* Form control */
+    .form-control {
+        height: 50px;
+        border-radius: 30px;
+        padding: 15px;
+        font-size: 1.1rem;
+        border: 1px solid #ccc;
+        width: 100%;
+    }
+
+    /* Filter by creator, activity, and date styling */
+    select.form-control {
+        border-radius: 30px;
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    /* Smaller search button */
+    .btn-primary {
+        border-radius: 30px;
+        font-size: 1rem;
+        padding: 10px 20px; /* Smaller padding */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .input-group button {
+        font-size: 1rem; /* Smaller font size */
+        padding: 10px 20px; /* Smaller padding */
+    }
+
+    .input-group button i {
+        margin-right: 5px;
+    }
+
+    /* Space between filters */
+    .row-cols-md-3 .col {
+        padding: 0 15px;
+    }
+
+    /* Adjust width for large screens */
+    @media (min-width: 768px) {
+        .row-cols-md-3 .col {
+            width: 30%;
+        }
+    }
+
+    /* Button styling */
+    .btn-outline-info {
+        border-radius: 30px;
+        padding: 8px 20px;
+        border-color: #17a2b8;
+        color: #17a2b8;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #17a2b8;
+        color: white;
+        transform: scale(1.05);
+        transition: transform 0.2s ease;
+    }
+
+    /* Forum card styling */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Forum card banner styling */
+    .forum-banner {
+        position: relative;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .forum-banner:hover {
+        background-color: rgba(0, 0, 0, 0.3); /* Darker overlay on hover */
+    }
+
+    .forum-title-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    /* Button adjustments for creating forum */
+    .btn-success {
+        border-radius: 30px;
+        font-size: 1.1rem;
+        padding: 12px 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #28a745;
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+

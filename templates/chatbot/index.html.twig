@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chatbot Index{% endblock %}
+
+{% block body %}
+<div class="index-page">
+    <h1 class="text-center">Chatbot Index</h1>
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Creation Date</th>
+                <th>Content</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for chatbot in chatbots %}
+            <tr>
+                <td>{{ chatbot.idChatbot }}</td>
+                <td>{{ chatbot.datecreationChatbot ? chatbot.datecreationChatbot|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ chatbot.contenuChatbot }}</td>
+                <td>{{ chatbot.autheurChatbot }}</td>
+                <td class="action-buttons">
+                    <a href="{{ path('app_chatbot_show', {'idChatbot': chatbot.idChatbot}) }}" class="btn btn-outline-info btn-sm">Show</a>
+                    <a href="{{ path('app_chatbot_edit', {'idChatbot': chatbot.idChatbot}) }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_chatbot_new') }}" class="btn btn-success">Create New Chatbot</a>
+    </div>
+</div>
+{% endblock %}

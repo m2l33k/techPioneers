@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Événements{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <h1 class="text-center mb-4">Liste des Événements</h1>
+    <!-- Search Form -->
+    <div class="search-form mb-4">
+        {{ form_start(form, { 'attr': { 'class': 'd-flex align-items-center' } }) }}
+            <div class="input-group">
+                {{ form_widget(form.search, { 'attr': { 'class': 'form-control', 'placeholder': 'Rechercher un événement...' } }) }}
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Rechercher
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+
+    <!-- Event List -->
+    <div class="row">
+        <div class="row">
+    {% for evenement in evenements %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ evenement.getTitreEvenement() }}</h5> <!-- Correct use of getter -->
+                    <p class="card-text">
+                        <strong>Date:</strong> {{ evenement.getDateEvenement()|date('d/m/Y') }}<br>
+                        <strong>Lieu:</strong> {{ evenement.getLieuEvenement }}<br>
+                        <strong>Description:</strong> {{ evenement.getDescriptionEvenement()|u.truncate(100, '...') }}
+                    </p>
+                    <div class="text-center">
+                    <a href="{{ path('app_evenement_participate', { id: evenement.idEvenement }) }}" class="btn btn-primary">Participate</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p class="col-12 text-center">Aucun événement trouvé.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

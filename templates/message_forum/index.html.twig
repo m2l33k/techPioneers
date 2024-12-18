@@ -4,42 +4,147 @@
 
 {% block body %}
 <div class="index-page">
-    <h1 class="text-center">Message Forum Index</h1>
+    <h1 class="text-center my-5 text-primary font-weight-bold">Messages</h1>
 
-    <table class="table table-hover table-bordered">
-        <thead class="table-primary">
-            <tr>
-                <th>ID</th>
-                <th>Creator</th>
-                <th>Forum ID</th>
-                <th>Content</th>
-                <th>Creation Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for message_forum in message_forums %}
-            <tr>
-                <td>{{ message_forum.idMessageForum }}</td>
-                <td>{{ message_forum.createurMessageForum }}</td>
-                <td>{{ message_forum.idForum }}</td>
-                <td>{{ message_forum.conetenuIdMessageForum }}</td>
-                <td>{{ message_forum.dateCreationIdMessageForum ? message_forum.dateCreationIdMessageForum|date('Y-m-d H:i:s') : '' }}</td>
-                <td class="action-buttons">
-                    <a href="{{ path('app_message_forum_show', {'idMessageForum': message_forum.idMessageForum}) }}" class="btn btn-outline-info btn-sm">Show</a>
-                    <a href="{{ path('app_message_forum_edit', {'idMessageForum': message_forum.idMessageForum}) }}" class="btn btn-outline-primary btn-sm">Edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6" class="text-center">No records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <!-- Search Form -->
+    <form method="GET" action="{{ path('app_message_forum_index') }}" class="mb-4">
+        <div class="input-group justify-content-center">
+            <input type="text" name="query" class="form-control rounded-pill border-0 shadow-sm" placeholder="Search messages" value="{{ app.request.query.get('query') }}">
+            <button type="submit" class="btn btn-primary rounded-pill shadow-sm">
+                <i class="bi bi-search"></i> Search
+            </button>
+        </div>
+    </form>
 
-    <div class="text-center mt-4">
-        <a href="{{ path('app_message_forum_new') }}" class="btn btn-success">Create New Message</a>
-    </div>
+   
+
+    {% if results is not empty %}
+        <table class="table table-hover table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Creator</th>
+                    <th>Forum</th>
+                    <th>Content</th>
+                    <th>Creation Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message_forum in results %}
+                    <tr>
+                        <td>{{ message_forum.idMessageForum }}</td>
+                        <td>{{ message_forum.createurMessageForum.username }}</td>
+                        <td>{{ message_forum.forum ? message_forum.forum.titreForum : 'No Forum' }}</td>
+                        <td>{{ message_forum.conetenuIdMessageForum }}</td>
+                        <td>{{ message_forum.dateCreationIdMessageForum|date('Y-m-d H:i:s') }}</td>
+                        <td class="text-center">
+                            <a href="{{ path('app_message_forum_show', {'idMessageForum': message_forum.idMessageForum}) }}" class="btn btn-outline-info btn-sm rounded-pill">
+                                <i class="bi bi-eye"></i> Show
+                            </a>
+                            <a href="{{ path('app_message_forum_edit', {'id_message_forum': message_forum.idMessageForum}) }}" class="btn btn-outline-primary btn-sm rounded-pill">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <form action="{{ path('app_message_forum_delete', {'IdMessageForum': message_forum.idMessageForum}) }}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this message?');">
+                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center">No results found for your query.</p>
+    {% endif %}
 </div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    /* General page styling */
+    .index-page {
+        padding: 40px 30px;
+        background-color: #f7f9fc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Title styling */
+    h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #007bff;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Table styling */
+    .table {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f5f9;
+    }
+
+    .table-primary {
+        background-color: #007bff;
+        color: white;
+        font-weight: 600;
+    }
+
+    /* Button styling */
+    .btn-outline-info, .btn-outline-primary, .btn-outline-danger {
+        border-radius: 30px;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-width: 2px;
+    }
+
+    .btn-outline-info:hover, .btn-outline-primary:hover, .btn-outline-danger:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-outline-info i, .btn-outline-primary i, .btn-outline-danger i {
+        margin-right: 5px;
+    }
+
+    /* Search input and button styles */
+    .input-group {
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    .form-control {
+        height: 50px;
+        border-radius: 30px;
+        padding: 15px;
+        font-size: 1.1rem;
+        border: 1px solid #ccc;
+    }
+
+    .btn-primary {
+        border-radius: 30px;
+        font-size: 1.1rem;
+        padding: 12px 25px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
 {% endblock %}

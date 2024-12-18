@@ -11,24 +11,68 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+//import UrlGeneratorInterface
 
 #[Route('/evenement')]
 final class EvenementController extends AbstractController
 {
-    #[Route('', name: 'app_evenement_index', methods: ['GET', 'POST'])]
-    public function index(Request $request, EvenementRepository $evenementRepository): Response
+  #[Route('/evenements/manage', name: 'app_evenement_manage', methods: ['GET', 'POST'])]
+public function manage(Request $request, EvenementRepository $evenementRepository): Response
+{
+    // Same logic for teachers
+    $form = $this->createForm(EvenementSearchType::class);
+    $form->handleRequest($request);
+
+    $evenements = $evenementRepository->findAll();
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $criteria = $form->getData();
+        $evenements = $evenementRepository->search($criteria);
+    }
+
+    return $this->render('evenement/index.html.twig', [
+        'form' => $form->createView(),
+        'evenements' => $evenements,
+    ]);
+}
+
+#[Route('/evenements/front', name: 'app_evenement_front', methods: ['GET'])]
+public function front(Request $request ,EvenementRepository $evenementRepository): Response
+{
+   // Create the search form
+   $form = $this->createForm(EvenementSearchType::class);
+   $form->handleRequest($request);
+
+   // Get all events by default
+   $evenements = $evenementRepository->findAll();
+
+   // Filter events if the form is submitted and valid
+   if ($form->isSubmitted() && $form->isValid()) {
+       $criteria = $form->getData();
+       $evenements = $evenementRepository->search($criteria);
+   }
+
+   return $this->render('evenement/front.html.twig', [
+       'form' => $form->createView(), // Pass the form to the template
+       'evenements' => $evenements,
+   ]);
+}
+    #[Route('/evenements', name: 'app_evenement_index2', methods: ['GET', 'POST'])]
+    public function index2(Request $request, EvenementRepository $evenementRepository): Response
     {
-        // Créez le formulaire de recherche
+        // Create the search form
         $form = $this->createForm(EvenementSearchType::class);
         $form->handleRequest($request);
 
-        // Par défaut, affichez tous les événements
+        // Default: show all events
         $evenements = $evenementRepository->findAll();
 
-        // Si le formulaire est soumis et valide, effectuez une recherche
+        // If the search form is submitted and valid, perform a search
         if ($form->isSubmitted() && $form->isValid()) {
             $criteria = $form->getData();
-            $evenements = $evenementRepository->search($criteria);
+            $evenements = $evenementRepository->search($criteria); // Define this method in the repository
         }
 
         return $this->render('evenement/index.html.twig', [
@@ -96,26 +140,25 @@ final class EvenementController extends AbstractController
 
 
 
-    #[Route( name: 'app_evenement_index2', methods: ['GET', 'POST'])]
-    public function index2(Request $request, EvenementRepository $evenementRepository): Response
+
+
+    #[Route('/participate/{id}', name: 'app_evenement_participate', methods: ['GET'])]
+    public function participate(int $id, UrlGeneratorInterface $urlGenerator, EvenementRepository $evenementRepository): Response
     {
-        // Créez le formulaire de recherche
-        $form = $this->createForm(EvenementSearchType::class);
-        $form->handleRequest($request);
-
-        // Par défaut, affichez tous les événements
-        $evenements = $evenementRepository->findAll();
-
-        // Si le formulaire est soumis et valide, effectuez une recherche
-        if ($form->isSubmitted() && $form->isValid()) {
-            $criteria = $form->getData();
-            $evenements = $evenementRepository->search($criteria);
+        // Fetch the evenement entity using the provided ID
+        $evenement = $evenementRepository->find($id);
+    
+        if (!$evenement) {
+            throw $this->createNotFoundException('Événement introuvable.');
         }
-
-        return $this->render('evenement/index1.html.twig', [
-
-            'evenements' => $evenements,
-        ]);
+    
+        // Logic to handle participation (e.g., adding the user to the participants list)
+    
+        $this->addFlash('success', 'Vous avez participé à l\'événement avec succès !');
+    
+        // Redirect to the panier or participation list route
+        return $this->redirectToRoute('app_participation_list');
     }
+
 
 }

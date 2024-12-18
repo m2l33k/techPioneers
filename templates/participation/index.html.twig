@@ -1,0 +1,17 @@
+{# src/Resources/views/participation/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>My Participations</h1>
+
+    <ul>
+        {% for evenement in participations %}
+            <li>
+                <a href="{{ path('app_evenement_show', { idEvenement: evenement.id }) }}">{{ evenement.title }}</a>
+            </li>
+        {% else %}
+            <p>No participations found.</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,340 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conversation{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="forum-header text-center mb-4">
+        <h1 class="forum-title">
+            <i class="fas fa-comments"></i> {{ forum.titreForum }}
+        </h1>
+        <p class="forum-description">
+            <i class="fas fa-info-circle"></i> {{ forum.descriptionForum }}
+        </p>
+    </div>
+
+    <!-- Search Form -->
+    <form method="GET" action="{{ path('app_forum_front_show', {'idForum': forum.idForum}) }}" class="search-form mb-4 d-flex align-items-center">
+        <div class="input-group">
+            <input type="text" name="search" value="{{ search|default('') }}" class="form-control search-input" placeholder="Search messages...">
+            <button type="submit" class="btn btn-outline-primary search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+
+    <!-- Chat Section -->
+    <div class="chat-section rounded shadow-lg">
+        <div class="chat-box">
+            {% if messages|default([]) is empty %}
+                <div class="no-messages text-muted text-center">No messages yet.</div>
+            {% else %}
+                {% if search %}
+                    <h3>Search results for "{{ search }}"</h3>
+                {% endif %}
+                {% for message in messages %}
+                    <div class="message-item {% if message.createurMessageForum == app.user %} my-message {% else %} other-message {% endif %}">
+                        <div class="message-avatar">
+                            <img src="{{ asset(message.createurMessageForum.photoUser ? message.createurMessageForum.photoUser : 'img/userIcon.png') }}" 
+                                 alt="{{ message.createurMessageForum.username }}" class="avatar">
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>{{ message.createurMessageForum.username }} {{ message.createurMessageForum.preusername }}</strong>
+                                <span class="message-time">
+                                    <i class="fas fa-clock"></i> {{ message.dateCreationIdMessageForum|date('m/d/Y, H:i:s') }}
+                                </span>
+                                <button class="edit-message-btn" data-message-id="{{ message.idMessageForum }}">
+                                    <i class="fas fa-edit"></i> 
+                                </button>
+                            </div>
+                            <div class="message-text" id="message-text-{{ message.idMessageForum }}">
+                                {{ message.conetenuIdMessageForum|raw }}
+                            </div>
+                            <div class="edit-form" id="edit-form-{{ message.idMessageForum }}" style="display: none;">
+                                <textarea id="edit-message-content-{{ message.idMessageForum }}" class="form-control message-input" rows="3">{{ message.conetenuIdMessageForum }}</textarea>
+                                <button class="btn btn-outline-success save-edit-btn" data-message-id="{{ message.idMessageForum }}">Save</button>
+                                <button class="btn btn-outline-secondary cancel-edit-btn" data-message-id="{{ message.idMessageForum }}">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+      
+        <!-- Message Input -->
+        
+        <div class="message-input">
+            <form action="{{ path('app_message_forum_new', {'idForum': forum.idForum}) }}" method="post" enctype="multipart/form-data" class="message-form">
+                <textarea id="messageContent" name="messageContent" class="form-control message-input" placeholder="Type your message..." required></textarea>
+                <div class="input-group mt-3">
+                    <label for="fileInput" class="btn btn-outline-primary file-label">
+                        <i class="fas fa-paperclip"></i> Choose Files
+                    </label>
+                    <input type="file" name="messageFile[]" class="form-control file-input" id="fileInput" multiple style="display:none;">
+                    <button type="submit" class="btn btn-send">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </form>
+    </div>
+
+    
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_forum_front_index') }}" class="btn btn-outline-secondary back-button">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+
+
+
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .chat-section {
+        background: #ffffff;
+        border: 2px solid #dee2e6;
+        border-radius: 16px;
+        padding: 20px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-box {
+        padding: 20px;
+        padding-bottom: 150px;
+        background: #f5f5f5;
+        border: 2px solid #ced4da;
+        border-radius: 12px;
+    }
+
+    .message-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 8px;
+    }
+
+    .message-avatar {
+        margin-right: 10px;
+        width: 40px;
+        height: 40px;
+        border: 2px solid #007bff;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .avatar {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .message-content {
+        background: #e9ecef;
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        max-width: 55%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .my-message .message-content {
+        background: #007bff;
+        color: #fff;
+        border: 1px solid #0056b3;
+    }
+
+    .message-header {
+        font-weight: bold;
+        font-size: 0.9rem;
+        color: #333;
+        margin-bottom: 6px;
+    }
+
+    .message-time {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-left: 6px;
+    }
+
+    .message-text {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .message-item:hover {
+        background-color: #f1f3f5;
+        transform: scale(1.02);
+    }
+
+    .message-input {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .file-input {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 8px;
+    }
+
+    .btn-send {
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+
+    .back-button {
+        border-radius: 8px;
+        padding: 8px 16px;
+    }
+
+    .file-label {
+        display: inline-block;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .file-label:hover {
+        background-color: #e9ecef;
+    }
+
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    /* Custom Styles for the Search Form */
+.search-form {
+    max-width: 500px; /* Limit the width */
+    margin: 0 auto; /* Center the search form */
+}
+
+.search-input {
+    font-size: 0.9rem; /* Smaller text */
+    padding: 5px 10px; /* Adjust padding */
+    border-radius: 25px; /* Rounded corners */
+    border: 1px solid #ced4da; /* Subtle border */
+}
+
+.search-btn {
+    background-color: #007bff; /* Primary button color */
+    color: white;
+    border: 1px solid #007bff;
+    border-radius: 50%;
+    padding: 8px 12px;
+    margin-left: 10px;
+}
+
+.search-btn i {
+    font-size: 1rem; /* Icon size */
+}
+
+.search-btn:hover {
+    background-color: #0056b3; /* Hover effect */
+    border-color: #0056b3;
+}
+
+.search-form .input-group {
+    display: flex;
+    align-items: center;
+}
+.edit-message-btn {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.3s;
+    color: #007bff;  /* Minimal blue color */
+    font-size: 1.2rem;
+}
+
+.edit-message-btn:hover {
+    color: #0056b3; /* Slightly darker blue on hover */
+    transform: scale(1.1);  /* Subtle scaling effect */
+}
+
+.edit-message-btn:focus {
+    outline: none;  /* Remove the focus outline */
+}
+
+ .edit-form {
+        margin-top: 10px;
+    }
+
+    .edit-message-btn, .save-edit-btn, .cancel-edit-btn {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    // Edit Message functionality
+document.querySelectorAll('.edit-message-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const messageId = this.getAttribute('data-message-id');
+        document.getElementById(`message-text-${messageId}`).style.display = 'none';
+        document.getElementById(`edit-form-${messageId}`).style.display = 'block';
+    });
+});
+
+document.querySelectorAll('.cancel-edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const messageId = this.getAttribute('data-message-id');
+        document.getElementById(`message-text-${messageId}`).style.display = 'block';
+        document.getElementById(`edit-form-${messageId}`).style.display = 'none';
+    });
+});
+
+document.querySelectorAll('.save-edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const messageId = this.getAttribute('data-message-id');
+        const editedContent = document.getElementById(`edit-message-content-${messageId}`).value;
+
+        // Send data as form data instead of JSON
+        const formData = new FormData();
+        formData.append('content', editedContent);
+
+        fetch(`/forum/message/edit/${messageId}`, {  // Ensure this matches the correct route URL
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.updatedMessage) {
+                document.getElementById(`message-text-${messageId}`).innerText = editedContent;
+                document.getElementById(`message-text-${messageId}`).style.display = 'block';
+                document.getElementById(`edit-form-${messageId}`).style.display = 'none';
+            } else {
+                alert('Failed to save changes.');
+            }
+        })
+        .catch(error => {
+            alert('Error occurred while saving changes.');
+        });
+    });
+});
+
+
+</script>
+{% endblock %}
+{% endblock %}

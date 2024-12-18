@@ -1,84 +1,93 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\MessageForumRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Forum;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: MessageForumRepository::class)]
 class MessageForum
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    public int $Id_MessageForum; // Non null
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
+    private $IdMessageForum;
 
-    #[ORM\Column(length: 255)]
-    private string $Createur_MessageForum; // Non null
+   // Define the relation with the User entity (ManyToOne)
+   #[ORM\ManyToOne(targetEntity: User::class)]
+   #[ORM\JoinColumn(name: 'CreateurMessageForum', referencedColumnName: 'id')]
+   private ?User $CreateurMessageForum; 
 
-    #[ORM\Column]
-    private int $Id_Forum; // Non null
+    // No need for 'id_forum' property explicitly in the entity
+    #[ORM\ManyToOne(targetEntity: Forum::class, inversedBy: 'messages')]
+    #[ORM\JoinColumn(name: 'id_forum', referencedColumnName: 'id_forum', nullable: true)]
+    #[Groups(['message:read'])]
+    private ?Forum $forum;
 
     #[ORM\Column(type: 'text')]
-    private string $Conetenu_Id_MessageForum; // Non null
+    private string $ConetenuIdMessageForum;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $DateCreation_Id_MessageForum; // Non null
+    #[Groups(['message:read'])]
+    private \DateTimeInterface $DateCreationIdMessageForum;
 
     // Getters and Setters
 
-    public function getId_MessageForum(): int
-    {
-        return $this->Id_MessageForum;
-    }
+    public function getIdMessageForum(): ?int
+{
+    return $this->IdMessageForum;
+}
 
     public function setIdMessageForum(int $Id_MessageForum): static
     {
-        $this->Id_MessageForum = $Id_MessageForum;
+        $this->IdMessageForum = $Id_MessageForum;
         return $this;
     }
 
-    public function getCreateurMessageForum(): string
+    public function getCreateurMessageForum(): User
     {
-        return $this->Createur_MessageForum;
+        return $this->CreateurMessageForum;
     }
 
-    public function setCreateurMessageForum(string $Createur_MessageForum): static
+    public function setCreateurMessageForum(User $Createur_MessageForum): static
     {
-        $this->Createur_MessageForum = $Createur_MessageForum;
+        $this->CreateurMessageForum = $Createur_MessageForum;
         return $this;
     }
 
-    public function getIdForum(): int
+    // Getters and Setters for Forum (the association with Forum)
+    public function getForum(): ?Forum
     {
-        return $this->Id_Forum;
+        return $this->forum;
     }
 
-    public function setIdForum(int $Id_Forum): static
+    public function setForum(?Forum $forum): static
     {
-        $this->Id_Forum = $Id_Forum;
+        $this->forum = $forum;
         return $this;
     }
 
     public function getConetenuIdMessageForum(): string
     {
-        return $this->Conetenu_Id_MessageForum;
+        return $this->ConetenuIdMessageForum;
     }
 
     public function setConetenuIdMessageForum(string $Conetenu_Id_MessageForum): static
     {
-        $this->Conetenu_Id_MessageForum = $Conetenu_Id_MessageForum;
+        $this->ConetenuIdMessageForum = $Conetenu_Id_MessageForum;
         return $this;
     }
 
     public function getDateCreationIdMessageForum(): \DateTimeInterface
     {
-        return $this->DateCreation_Id_MessageForum;
+        return $this->DateCreationIdMessageForum;
     }
 
     public function setDateCreationIdMessageForum(\DateTimeInterface $DateCreation_Id_MessageForum): static
     {
-        $this->DateCreation_Id_MessageForum = $DateCreation_Id_MessageForum;
+        $this->DateCreationIdMessageForum = $DateCreation_Id_MessageForum;
         return $this;
     }
 }

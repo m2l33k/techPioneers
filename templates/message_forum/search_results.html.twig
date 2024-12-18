@@ -1,0 +1,34 @@
+{% if results is not empty %}
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Creator</th>
+                <th>Forum</th>
+                <th>Content</th>
+                <th>Creation Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for message_forum in results %}
+            <tr>
+                <td>{{ message_forum.idMessageForum }}</td>
+                <td>{{ message_forum.createurMessageForum.username }}</td>
+                <td>{{ message_forum.forum ? message_forum.forum.titreForum : 'No Forum' }}</td>
+                <td>{{ message_forum.conetenuIdMessageForum }}</td>
+                <td>{{ message_forum.dateCreationIdMessageForum|date('Y-m-d H:i:s') }}</td>
+                <td>
+                    <a href="{{ path('app_message_forum_show', {'Id_MessageForum': message_forum.idMessageForum}) }}" class="btn btn-outline-info btn-sm">Show</a>
+                    <a href="{{ path('app_message_forum_edit', {'id_message_forum': message_forum.idMessageForum}) }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                    <form action="{{ path('app_message_forum_delete', {'IdMessageForum': message_forum.idMessageForum}) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-center">No results found for your query.</p>
+{% endif %}

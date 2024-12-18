@@ -22,6 +22,8 @@ class Chatbot
     #[ORM\Column]
     private int $Autheur_Chatbot; // Non null
 
+    
+
     // Getters and Setters
 
     public function getId_Chatbot(): int

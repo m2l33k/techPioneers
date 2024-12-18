@@ -17,7 +17,7 @@
                     <label for="titreForum" class="form-label text-dark fw-semibold">Forum Title</label>
                     {{ form_widget(form.titreForum, {'attr': {'class': 'form-control form-control-lg'}}) }}
                     <div class="text-danger">
-                        {{ form_errors(form.titreForum) }} {# Validation error display in red #}
+                        {{ form_errors(form.titreForum) }} {# Validation error in red #}
                     </div>
                 </div>
 
@@ -26,17 +26,28 @@
                     <label for="descriptionForum" class="form-label text-dark fw-semibold">Forum Description</label>
                     {{ form_widget(form.descriptionForum, {'attr': {'class': 'form-control form-control-lg', 'rows': 4}}) }}
                     <div class="text-danger">
-                        {{ form_errors(form.descriptionForum) }} {# Validation error display in red #}
+                        {{ form_errors(form.descriptionForum) }} {# Validation error in red #}
                     </div>
                 </div>
 
                 <!-- Forum Creator -->
-                <div class="mb-4">
-                  <label for="createurForum" class="form-label text-dark fw-semibold">Forum Creator : {{ app.user.userIdentifier }}</label>
+                  <div class="mb-4">
+                  <label for="createurForum" class="form-label text-dark fw-semibold">Forum Creator :   {{ app.user.userIdentifier }}</label>
                   <div class="form-text text-dark fw-semibold">
-                       <!-- Display the name of the current user -->
+                     <!-- Display the name of the current user -->
+
+                     <div class="mb-4">
+                    <label for="createurForum" class="form-label text-dark fw-semibold">Forum Email's Creator</label>
+                    {{ form_widget(form.createurForum, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                    <div class="text-danger">
+                        {{ form_errors(form.createurForum) }} {# Validation error in red #}
+                    </div>
+                </div>
                   </div>
                 </div>
+
+
+
 
 
                 <!-- Submit Button -->
@@ -50,7 +61,7 @@
     </div>
 
     <div class="text-center mt-4">
-        <a href="{{ path('app_forum_index') }}" class="btn btn-outline-dark btn-lg">Back to Forum List</a>
+        <a href="{{ path('app_forum_front_index') }}" class="btn btn-outline-dark btn-lg">Back to Forum List</a>
     </div>
 </div>
 {% endblock %}
