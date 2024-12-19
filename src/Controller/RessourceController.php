@@ -26,7 +26,7 @@ final class RessourceController extends AbstractController
       } else {
           $ressources = $ressourceRepository->findAll();  // Sinon, récupère toutes les ressources
       }
-    //  $this->denyAccessUnlessGranted('ROLE_TEACHER');
+    $this->denyAccessUnlessGranted('ROLE_STUDENT');
       return $this->render('ressource/index.html.twig', [
           'ressources' => $ressources,
       ]);
@@ -43,7 +43,7 @@ final class RessourceController extends AbstractController
            
             $entityManager->persist($ressource);
             $entityManager->flush();
-        
+            $this->denyAccessUnlessGranted('ROLE_STUDENT');
             return $this->redirectToRoute('app_ressource_index', [], Response::HTTP_SEE_OTHER);
         }
         
@@ -57,6 +57,7 @@ final class RessourceController extends AbstractController
     #[Route('/{Id_Ressource}', name: 'app_ressource_show', methods: ['GET'])]
     public function show(Ressource $ressource): Response
     {
+      $this->denyAccessUnlessGranted('ROLE_STUDENT');
         return $this->render('ressource/show.html.twig', [
             'ressource' => $ressource,
         ]);
@@ -73,7 +74,7 @@ final class RessourceController extends AbstractController
 
             return $this->redirectToRoute('app_ressource_index', [], Response::HTTP_SEE_OTHER);
         }
-
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
         return $this->render('ressource/edit.html.twig', [
             'ressource' => $ressource,
             'form' => $form,

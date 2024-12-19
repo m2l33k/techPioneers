@@ -32,7 +32,7 @@ public function index(Request $request, MessageForumRepository $messageForumRepo
         // If there's no query, show all messages
         $results = $messageForumRepository->findAll();
     }
-
+    $this->denyAccessUnlessGranted('ROLE_STUDENT');
     // Return the results to the same page
     return $this->render('message_forum/index.html.twig', [
         'results' => $results,  // Pass the filtered results
@@ -52,7 +52,7 @@ public function show(int $idMessageForum, MessageForumRepository $messageForumRe
     if (!$messageForum) {
         throw new NotFoundHttpException('MessageForum not found.');
     }
-
+    $this->denyAccessUnlessGranted('ROLE_STUDENT');
     return $this->render('message_forum/show.html.twig', [
         'message_forum' => $messageForum,
     ]);
@@ -75,7 +75,7 @@ public function edit(Request $request, EntityManagerInterface $em, int $id_messa
         $em->flush();
         return $this->redirectToRoute('app_message_forum_index');
     }
-
+    $this->denyAccessUnlessGranted('ROLE_STUDENT');
     return $this->render('message_forum/edit.html.twig', [
         'message_forum' => $message_forum,
         'form' => $form->createView(),

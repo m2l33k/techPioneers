@@ -113,7 +113,7 @@ final class CoursController extends AbstractController
     $cours = $searchTerm
         ? $coursRepository->findByTitle($searchTerm) // Méthode custom dans le repository pour rechercher
         : $coursRepository->findAll(); // Tous les cours si pas de recherche
-
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
     return $this->render('cours/index2.html.twig', [
         'cours' => $cours,
         'searchTerm' => $searchTerm, // Envoyer le terme de recherche pour le pré-remplir dans le champ

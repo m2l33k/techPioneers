@@ -29,7 +29,9 @@ class StatsController extends AbstractController
       $totalCourses = $coursRepository->count([]);
       $totalResources = $ressourceRepository->count([]);
       $totalUsers = $userRepository->count([]); // Use correct variable name
-
+      
+      
+      $this->denyAccessUnlessGranted('ROLE_ADMIN');
       return $this->render('stat/index.html.twig', [
           'totalEvents' => $totalEvents,
           'totalForums' => $totalForums,

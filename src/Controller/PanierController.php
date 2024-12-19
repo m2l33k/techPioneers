@@ -20,7 +20,7 @@ class PanierController extends AbstractController
     public function showPanier(): Response
     {
         $panierItems = $this->panierService->getPanier();
-
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
         return $this->render('panier/show.html.twig', [
             'panierItems' => $panierItems,
         ]);
@@ -32,7 +32,7 @@ class PanierController extends AbstractController
         $this->panierService->removeFromPanier($id);
 
         $this->addFlash('success', 'L\'événement a été retiré du panier.');
-
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
         return $this->redirectToRoute('app_panier_show');
     }
 }

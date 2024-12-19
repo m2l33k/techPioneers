@@ -32,7 +32,7 @@ class EventsController extends AbstractController
         $events = $evenementRepository->findEvents1($search, $filter, $sort, $nbre, ($page - 1) * $nbre);
         $nbEvent = $evenementRepository->countFilteredEvents1($search, $filter);
         $nbrePage = ceil($nbEvent / $nbre);
-
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
          return $this->render('events/index.html.twig', [
             'events' => $events,
             'isPaginated' => true,
@@ -89,8 +89,10 @@ class EventsController extends AbstractController
             $em->flush();
             $message = " a été ajouté avec succès";
             $this->addFlash('success',$message);
+            $this->denyAccessUnlessGranted('ROLE_TEACHER');
             return $this->redirectToRoute('app_events.read');
         }
+        $this->denyAccessUnlessGranted('ROLE_TEACHER');
         return $this->render('events/add.html.twig', [
             'form' => $form->createView()
         ]);
@@ -119,8 +121,10 @@ class EventsController extends AbstractController
             $em->flush();
             $message = " a été edité avec succès";
             $this->addFlash('success',$message);
+            $this->denyAccessUnlessGranted('ROLE_TEACHER');
             return $this->redirectToRoute('app_events.read');
         }
+        $this->denyAccessUnlessGranted('ROLE_TEACHER');
         return $this->render('events/edit.html.twig', [
             'form' => $form->createView()
         ]);

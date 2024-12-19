@@ -58,14 +58,15 @@ class PageController extends AbstractController
     #[Route('/Root', name: 'app_Root')]
     public function root(): Response
     {
-  //    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+  $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('page/Dashboard.html.twig',);
     }
 
     #[Route('/Teacher', name: 'app_Root1')]
     public function teacher(): Response
     {
-    //  $this->denyAccessUnlessGranted('ROLE_TEACHER');
+    
+        $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
         return $this->render('page/Dashboard1.html.twig',);
     }
@@ -73,6 +74,7 @@ class PageController extends AbstractController
     #[Route('/Student', name: 'app_Student')]
     public function STUDENT(): Response
     {
+      $this->denyAccessUnlessGranted('ROLE_STUDENT');
       // $this->denyAccessUnlessGranted('ROLE_STUDENT');
         return $this->render('page/STUDENT.html.twig',);
     }

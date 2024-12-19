@@ -36,7 +36,7 @@ final class ForumController extends AbstractController
         } else {
             $forums = $forumRepository->findAll();
         }
-
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
         return $this->render('forum/index.html.twig', [
             'forums' => $forums,
         ]);
@@ -67,7 +67,7 @@ public function indexFront(ForumRepository $forumRepository, UserRepository $use
     }
 
     $users = $userRepository->findAll();
-
+    $this->denyAccessUnlessGranted('ROLE_STUDENT');
     return $this->render('forum/index2.html.twig', [
         'forums' => $forums,
         'users' => $users,

@@ -29,6 +29,7 @@ final class ChatbotController extends AbstractController
             $messages[] = ['content' => "👤 $userMessage"];
             $messages[] = ['content' => "🤖 $botResponse"];
         }
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
 
         return $this->render('chatbot/conversation.html.twig', [
             'messages' => $messages,

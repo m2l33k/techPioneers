@@ -63,10 +63,18 @@
                <a href="{{path('app_cours_index2')}}" class="nav-item nav-link">Courses</a>
                <a href="{{path('app_subscription_event.read')}}" class="nav-item nav-link">Evenement</a>
                
+               
                {# <a href="{{path('app_events.read')}}" class="nav-item nav-link">app_events</a #}
                <a href="{{path('app_forum_front_index')}}" class="nav-item nav-link">Forum</a>
                <a href="{{path('chatbot_conversation')}}" class="nav-item nav-link">Chatbot</a>
 
+                  {% if is_granted('ROLE_TEACHER') %}
+                  <a href="{{ path('app_Root1') }}" class="nav-item nav-link">Dashboard</a>
+                  {% elseif is_granted('ROLE_STUDENT') %}
+                  <a href="{{ path('app_Student') }}" class="nav-item nav-link">Dashboard</a>
+                  {% elseif is_granted('ROLE_ADMIN') %}
+                  <a href="{{ path('app_Root') }}" class="nav-item nav-link">Dashboard</a>
+                  {% endif %}
                
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -74,6 +82,9 @@
                          <a href="{{path('app_team')}}" class="dropdown-item">Our Team</a>
                         <a href="{{path('app_Testimonial')}}" class="dropdown-item">Testimonial</a>
                         <a href="{{path('app_contact')}}" class="dropdown-item">Contact</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_Root') }}" class="dropdown-item">Dashboard</a>
+                        {% endif %}
                         </div>
                         </div>
                         
