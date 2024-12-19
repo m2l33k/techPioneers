@@ -14,7 +14,7 @@ class CoursType extends AbstractType
         $builder
             ->add('Titre_Cours')
             ->add('Descriptio_Cours')
-            ->add('Id_Enseignant_Cours')
+             //->add('Id_Enseignant_Cours')
             ->add('Date_creation_Cours', null, [
                 'widget' => 'single_text',
             ])

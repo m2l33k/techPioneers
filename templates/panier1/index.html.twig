@@ -1,0 +1,47 @@
+{# templates/panier/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Votre Panier</h1>
+
+    {% if events|length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Titre</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Organisateur</th>
+                    <th>Lien</th>
+                    <th>Lieu</th>
+                    <th>Catégorie</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.getIdEvenement() }}</td>
+                        <td>{{ event.getTitreEvenement() }}</td>
+                        <td>{{ event.getDateEvenement()|date('d/m/Y H:i') }}</td>
+                        <td>{{ event.getDescriptionEvenement()|slice(0, 50) }}...</td>
+                        <td>{{ event.getOrganisateurEvenement() }}</td>
+                        <td><a href="{{ event.getLienEvenement() }}" target="_blank">Voir l'événement</a></td>
+                        <td>{{ event.getLieuEvenement() ?: 'Non spécifié' }}</td>
+                        <td>{{ event.getCategory().getName() }}</td>
+                        <td>
+                            <a href="{{ path('app_panier_remove', { id: event.getIdEvenement() }) }}" class="btn btn-danger btn-sm">
+                                Retirer
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ path('app_evenement_front') }}" class="btn btn-primary">Continuer à explorer</a>
+    {% else %}
+        <p>Votre panier est vide.</p>
+        <a href="{{ path('app_evenement_front') }}" class="btn btn-primary">Retourner à la liste des événements</a>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Liste des Evenements{% endblock %}
+
+{% block body %}
+
+
+
+
+    <div class="container mt-5">
+        <h1 class="text-center text-primary mb-4">Liste des Événements</h1>
+
+        <!-- Bouton Ajouter un événement -->
+        <div class="mb-3 text-right">
+            <a href="{{ path('app_events.add') }}" class="btn btn-success">
+                <i class="fas fa-plus-circle"></i> Ajouter un événement
+            </a>
+        </div>
+
+        <!-- Formulaire de recherche et filtrage -->
+        <form method="get" action="{{ path('app_events.read') }}" class="mb-4">
+            <div class="form-row align-items-center">
+                <div class="col-md-3 mb-2">
+                    <input
+                            type="text"
+                            name="search"
+                            class="form-control"
+                            placeholder="Recherche par nom ou lieu"
+                            value="{{ search }}"
+                    >
+                </div>
+                <div class="col-md-3 mb-2">
+                    <select name="filter" class="form-control" onchange="this.form.submit()">
+                        <option value="">-- Filtrer par type --</option>
+                        <option value="Workshop" {{ filter == 'Workshop' ? 'selected' : '' }}>Workshop</option>
+                        <option value="Hackathon" {{ filter == 'Hackathon' ? 'selected' : '' }}>Hackathon</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <select name="sort" class="form-control" onchange="this.form.submit()">
+                        <option value="">-- Trier par --</option>
+                        <option value="name_asc" {{ sort == 'name_asc' ? 'selected' : '' }}>Nom (A-Z)</option>
+                        <option value="name_desc" {{ sort == 'name_desc' ? 'selected' : '' }}>Nom (Z-A)</option>
+                        <option value="date_asc" {{ sort == 'date_asc' ? 'selected' : '' }}>Date (Croissante)</option>
+                        <option value="date_desc" {{ sort == 'date_desc' ? 'selected' : '' }}>Date (Décroissante)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <button type="submit" class="btn btn-primary btn-block">Rechercher</button>
+                    <a href="{{ path('app_events.read') }}" class="btn btn-secondary btn-block">Réinitialiser</a>
+                </div>
+            </div>
+        </form>
+
+        <!-- Liste des événements sous forme de tableau -->
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Lieu</th>
+                <th>Capacité</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ event.EventName  }}</td>
+                    <td>{{ event.EventPlace }}</td>
+                    <td>{{ event.capacite }}</td>
+                    <td>{{ event.EventDate|date('Y-m-d') }}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <!-- Bouton Update -->
+                            <a href="{{ path('app_events.edit', {'id': event.id,'search':'louay'}) }}" class="btn btn-sm btn-warning" title="Modifier">
+
+                                <i class="fas fa-edit"></i> Modifier
+                            </a>
+
+                            <!-- Bouton Delete -->
+                            <a href="{{ path('app_events.delete', {'id': event.id}) }}"
+                               class="btn btn-sm btn-danger"
+                               title="Supprimer"
+                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?');">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </a>
+                            <!-- Bouton Details -->
+                            <a href="{{ path('app_events.detail', {'id': event.id}) }}" class="btn btn-sm btn-info" title="Voir détails">
+                                <i class="fas fa-info-circle"></i> Détails
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">Aucun événement trouvé.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination" class="d-flex justify-content-center">
+            <ul class="pagination">
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_events.read', {page: page - 1, nbre: nbre, search: search, filter: filter, sort: sort}) }}">Précédent</a>
+                    </li>
+                {% endif %}
+                {% for i in 1..nbrePage %}
+                    <li class="page-item {{ page == i ? 'active' : '' }}">
+                        <a class="page-link" href="{{ path('app_events.read', {page: i, nbre: nbre, search: search, filter: filter, sort: sort}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {% if page < nbrePage %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_events.read', {page: page + 1, nbre: nbre, search: search, filter: filter, sort: sort}) }}">Suivant</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+{% endblock %}

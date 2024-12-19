@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un  Evenement{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">🗓 Nouveau Evenement 🗓</h1>
+
+        <div class="card shadow-sm p-4">
+            {# Affichage du formulaire de création de cours avec Bootstrap #}
+            {% form_theme form 'bootstrap_5_layout.html.twig' %}
+            {{ form_start(form, { 'attr': { 'class': 'needs-validation', 'novalidate': '' } }) }}
+
+            <div class="mb-3">
+                {{ form_label(form.EventName, 'Event Name', { 'label_attr': { 'class': 'form-label' } }) }}
+                {{ form_widget(form.EventName, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.EventName, { 'attr': { 'class': 'text-danger' } }) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.EventDate, 'Event Date', { 'label_attr': { 'class': 'form-label' } }) }}
+                {{ form_widget(form.EventDate, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.EventDate, { 'attr': { 'class': 'text-danger' } }) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.capacite, 'Capacite', { 'label_attr': { 'class': 'form-label' } }) }}
+                {{ form_widget(form.capacite, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.capacite, { 'attr': { 'class': 'text-danger' } }) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.EventPlace, 'Event Place', { 'label_attr': { 'class': 'form-label' } }) }}
+                {{ form_widget(form.EventPlace, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.EventPlace, { 'attr': { 'class': 'text-danger' } }) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.EventDesc, 'Event Description', { 'label_attr': { 'class': 'form-label' } }) }}
+                {{ form_widget(form.EventDesc, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.EventDesc, { 'attr': { 'class': 'text-danger' } }) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.TypeEvenement, 'Type Evenement', { 'label_attr': { 'class': 'form-label' } }) }}
+                {{ form_widget(form.TypeEvenement, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.TypeEvenement, { 'attr': { 'class': 'text-danger' } }) }}
+            </div>
+
+
+            <div class="mb-3">
+                {{ form_label(form.image, 'image cover', { 'label_attr': { 'class': 'form-label' } }) }}
+                {{ form_widget(form.image, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.image, { 'attr': { 'class': 'text-danger' } }) }}
+            </div>
+
+
+
+            <div class="text-center mt-4">
+                {{ form_widget(form.save, { 'attr': { 'class': 'btn btn-primary px-4' } }) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+
+        {# Lien vers la liste des cours #}
+        <div class="text-center mt-3">
+            <a href="{{ path('app_events.read') }}" class="btn btn-secondary">Retour à la liste des Evenement</a>
+        </div>
+    </div>
+{% endblock %}

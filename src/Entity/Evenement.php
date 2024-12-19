@@ -1,152 +1,277 @@
 <?php
 
+
 namespace App\Entity;
 
+
 use App\Repository\EvenementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
-#[ORM\Table(name: "evenement")]
 class Evenement
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "idEvenement", type: "integer")]
-    private int $idEvenement;
+    #[ORM\Column]
+    private ?int $id = null;
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+#[ORM\JoinColumn(name: "category_id", referencedColumnName: "idCategory")]
+private ?Category $category = null;
+
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Le nom de l'événement est obligatoire.")]
+    #[Assert\Length(
+        max: 50,
+        maxMessage: "Le nom de l'événement ne doit pas dépasser {{ limit }} caractères."
+    )]
+    private ?string $EventName = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE,nullable: true)]
+
+
+    private ?\DateTimeInterface $EventDate = null;
+
+
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le titre de l'événement est obligatoire.")]
-    #[Assert\Length(
-        max: 255,
-        maxMessage: "Le titre de l'événement ne peut pas dépasser {{ limit }} caractères."
-    )]
-    private string $Titre_Evenement;
-
-    #[ORM\Column(type: 'datetime')]
-    #[Assert\NotNull(message: "La date de l'événement est obligatoire.")]
-    #[Assert\Type(
-        type: \DateTimeInterface::class,
-        message: "La date doit être une date valide."
-    )]
-    private \DateTimeInterface $Date_Evenement;
-
-    #[ORM\Column(type: 'text')]
     #[Assert\NotBlank(message: "La description de l'événement est obligatoire.")]
-    private string $Description_Evenement;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le nom de l'organisateur est obligatoire.")]
     #[Assert\Length(
         max: 255,
-        maxMessage: "Le nom de l'organisateur ne peut pas dépasser {{ limit }} caractères."
+        maxMessage: "La description de l'événement ne doit pas dépasser {{ limit }} caractères."
     )]
-    private string $Organisateur_Evenement;
+    private ?string $EventDesc = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le lien de l'événement est obligatoire.")]
-    #[Assert\Url(message: "Le lien doit être une URL valide.")]
-    private string $lien_Evenement;
+    #[ORM\Column(nullable: true)]
+    private ?string $TypeEvenement = null;
+
+
+
+    /**
+     * @var Collection<int, Projet>
+     */
+    #[ORM\OneToMany(targetEntity: Projet::class, mappedBy: 'evenement')]
+    private Collection $projets;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbProjet = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $capacite = null;
+
+    /**
+     * @var Collection<int, SubscriptionEvent>
+     */
+    #[ORM\OneToMany(targetEntity: SubscriptionEvent::class, mappedBy: 'event', orphanRemoval: true)]
+    private Collection $subscriptionEvents;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    #[ORM\Column]
+    private ?bool $status = null;
+
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Le lieu de l'événement est obligatoire.")]
     #[Assert\Length(
-        max: 255,
-        maxMessage: "Le lieu de l'événement ne peut pas dépasser {{ limit }} caractères."
+        max: 50,
+        maxMessage: "Le lieu de l'événement ne doit pas dépasser {{ limit }} caractères."
     )]
-    private ?string $Lieu_Evenement = null;
+    private ?string $EventPlace = null;
 
-    #[ORM\ManyToOne(targetEntity: Category::class)]
-    #[ORM\JoinColumn(name: "idCategory", referencedColumnName: "idCategory", nullable: false)]
-    #[Assert\NotNull(message: "La catégorie de l'événement est obligatoire.")]
-    private Category $category;
 
-    // Getters et Setters
 
-    public function getIdEvenement(): int
+    public function __construct()
     {
-        return $this->idEvenement;
+
+        $this->projets = new ArrayCollection();
+        $this->subscriptionEvents = new ArrayCollection();
     }
 
-    public function setIdEvenement(int $idEvenement): static
+    public function getId(): ?int
     {
-        $this->idEvenement = $idEvenement;
+        return $this->id;
+    }
+
+    public function getEventName(): ?string
+    {
+        return $this->EventName;
+    }
+
+    public function setEventName(string $EventName): static
+    {
+        $this->EventName = $EventName;
         return $this;
     }
 
-    public function getTitreEvenement(): string
+    public function getEventDate(): ?\DateTimeInterface
     {
-        return $this->Titre_Evenement;
+        return $this->EventDate;
     }
 
-    public function setTitreEvenement(string $Titre_Evenement): static
+    public function setEventDate(\DateTimeInterface $EventDate): static
     {
-        $this->Titre_Evenement = $Titre_Evenement;
+        $this->EventDate = $EventDate;
         return $this;
     }
 
-    public function getDateEvenement(): \DateTimeInterface
+
+
+    public function getEventDesc(): ?string
     {
-        return $this->Date_Evenement;
+        return $this->EventDesc;
     }
 
-    public function setDateEvenement(\DateTimeInterface $Date_Evenement): static
+    public function setEventDesc(string $EventDesc): static
     {
-        $this->Date_Evenement = $Date_Evenement;
+        $this->EventDesc = $EventDesc;
         return $this;
     }
 
-    public function getDescriptionEvenement(): string
+    public function getTypeEvenement(): ?string
     {
-        return $this->Description_Evenement;
+        return $this->TypeEvenement;
     }
 
-    public function setDescriptionEvenement(string $Description_Evenement): static
+    public function setTypeEvenement(?string $TypeEvenement): static
     {
-        $this->Description_Evenement = $Description_Evenement;
+        $this->TypeEvenement = $TypeEvenement;
         return $this;
     }
 
-    public function getOrganisateurEvenement(): string
-    {
-        return $this->Organisateur_Evenement;
-    }
-
-    public function setOrganisateurEvenement(string $Organisateur_Evenement): static
-    {
-        $this->Organisateur_Evenement = $Organisateur_Evenement;
-        return $this;
-    }
-
-    public function getLienEvenement(): string
-    {
-        return $this->lien_Evenement;
-    }
-
-    public function setLienEvenement(string $lien_Evenement): static
-    {
-        $this->lien_Evenement = $lien_Evenement;
-        return $this;
-    }
-
-    public function getLieuEvenement(): ?string
-    {
-        return $this->Lieu_Evenement;
-    }
-
-    public function setLieuEvenement(?string $Lieu_Evenement): static
-    {
-        $this->Lieu_Evenement = $Lieu_Evenement;
-        return $this;
-    }
-
-    public function getCategory(): Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
-
-    public function setCategory(Category $category): static
+    
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
         return $this;
     }
+    /**
+     * @return Collection<int, Projet>
+     */
+    public function getProjets() : Collection
+    {
+        return $this->projets;
+    }
+
+    public function addProjet(Projet $projet): static
+    {
+        if (!$this->projets->contains($projet)) {
+            $this->projets->add($projet);
+            $projet->setEvenement($this);
+        }
+        return $this;
+    }
+
+    public function removeProjet(Projet $projet): static
+    {
+        if ($this->projets->removeElement($projet)) {
+            // set the owning side to null (unless already changed)
+            if ($projet->getEvenement() === $this) {
+                $projet->setEvenement(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getNbProjet(): ?int
+    {
+        return $this->nbProjet;
+    }
+
+    public function setNbProjet(?int $nbProjet): static
+    {
+        $this->nbProjet = $nbProjet;
+
+        return $this;
+    }
+
+    public function getCapacite(): ?int
+    {
+        return $this->capacite;
+    }
+
+    public function setCapacite(int $capacite): static
+    {
+        $this->capacite = $capacite;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SubscriptionEvent>
+     */
+    public function getSubscriptionEvents(): Collection
+    {
+        return $this->subscriptionEvents;
+    }
+
+    public function addSubscriptionEvent(SubscriptionEvent $subscriptionEvent): static
+    {
+        if (!$this->subscriptionEvents->contains($subscriptionEvent)) {
+            $this->subscriptionEvents->add($subscriptionEvent);
+            $subscriptionEvent->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriptionEvent(SubscriptionEvent $subscriptionEvent): static
+    {
+        if ($this->subscriptionEvents->removeElement($subscriptionEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($subscriptionEvent->getEvent() === $this) {
+                $subscriptionEvent->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function isStatus(): ?bool
+    {
+        return $this->status;
+    }
+
+    public function setStatus(bool $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getEventPlace(): ?string
+    {
+        return $this->EventPlace;
+    }
+
+    public function setEventPlace(string $EventPlace): static
+    {
+        $this->EventPlace = $EventPlace;
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        // TODO: Implement __toString() method.
+        return $this->EventName;
+    }
+
 }

@@ -15,6 +15,9 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Entity\MessageForum; 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Form\MessageForumType;
+use Symfony\Component\Security\Core\Security;
+
 
 
 
@@ -134,28 +137,55 @@ public function new(Request $request, EntityManagerInterface $entityManager, Use
     }
     
     private $requestStack;
-
-    public function __construct(RequestStack $requestStack)
+    
+private EntityManagerInterface $entityManager;
+    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager)
     {
         $this->requestStack = $requestStack;
+        $this->entityManager = $entityManager;
     }
     
     #[Route('/forum/{idForum}', name: 'app_forum_front_show', methods: ['GET'])]
-    public function showFront(Forum $forum, MessageForumRepository $messageForumRepository): Response
-    {
-        // Retrieve the search term from the query parameters
+public function showFront(Forum $forum, MessageForumRepository $messageForumRepository, Request $request, EntityManagerInterface $entityManager, Security $security): Response
+{
+    // Retrieve the search term from the query parameters
     $search = $this->requestStack->getCurrentRequest()->query->get('search', null);
 
     // Use the search term to filter messages by forum ID and search query
     $messages = $messageForumRepository->searchByForumAndQuery($forum, $search);
 
-    // Render the forum page with the messages and search term
+    // Create and handle the form for posting a message
+    $message = new MessageForum();
+    $message->setForum($forum);
+
+    $user = $security->getUser();
+    if (!$user) {
+        throw $this->createAccessDeniedException('You must be logged in to post a message.');
+    }
+
+    $message->setCreateurMessageForum($user);
+    $message->setDateCreationIdMessageForum(new \DateTime('now'));
+
+    $form = $this->createForm(MessageForumType::class, $message);
+    $form->handleRequest($request);
+
+    // If the form is submitted and valid, persist the message
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($message);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_forum_front_show', ['idForum' => $forum->getIdForum()]);
+    }
+
+    // Render the forum page with the messages and form
     return $this->render('forum/show2.html.twig', [
         'forum' => $forum,
         'search' => $search,
         'messages' => $messages,
+        'form' => $form->createView(),  // Pass the form to the view
     ]);
-    }
+}
+
 
     
     #[Route('/{idForum}', name: 'app_forum_show', methods: ['GET'])]
@@ -167,24 +197,34 @@ public function new(Request $request, EntityManagerInterface $entityManager, Use
         
     }
 
-    #[Route('/{idForum}/edit', name: 'app_forum_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Forum $forum, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(ForumType::class, $forum);
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-    
-            return $this->redirectToRoute('app_forum_index', [], Response::HTTP_SEE_OTHER);
-        }
-    
-        return $this->render('forum/edit.html.twig', [
-            'form' => $form->createView(), // Pass the form view to the template
-            'forum' => $forum,
-        ]);
+  #[Route('/{idForum}/edit', name: 'app_forum_edit', methods: ['GET', 'POST'])]
+public function edit(Request $request, Forum $forum, EntityManagerInterface $entityManager): Response
+{
+    // Check if the logged-in user is the creator of the forum post
+    if ($this->getUser() !== $forum->getCreateurForum()) {
+        // If not the creator, redirect to the forum index or show an error
+        return $this->redirectToRoute('app_forum_index');
     }
-    
+
+    // Create the form and handle the request
+    $form = $this->createForm(ForumType::class, $forum);
+    $form->handleRequest($request);
+
+    // If form is submitted and valid, save changes
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+
+        // Redirect to the forum index page after successful edit
+        return $this->redirectToRoute('app_forum_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    // Render the edit page with the form
+    return $this->render('forum/edit.html.twig', [
+        'form' => $form->createView(),
+        'forum' => $forum,
+    ]);
+}
+
 
     #[Route('/{idForum}', name: 'app_forum_delete', methods: ['POST'])]
     public function delete(Request $request, Forum $forum, EntityManagerInterface $entityManager): Response
@@ -199,32 +239,74 @@ public function new(Request $request, EntityManagerInterface $entityManager, Use
 
 
 
-    #[Route('/message/edit/{id}', name: 'edit_message_forum', methods: ['POST'])]
-public function editMessage(Request $request, MessageForum $message, EntityManagerInterface $em)
+    #[Route('forum/{idForum}/message/{idMessageForum}/edit', name: 'edit_message_forum', methods: ['PUT'])]
+public function editMessage(Request $request, Forum $forum, MessageForum $message, EntityManagerInterface $em): JsonResponse
 {
-    // Ensure the message exists
-    if (!$message) {
-        return new JsonResponse(['error' => 'Message not found'], 404);
+    // Ensure the logged-in user is the creator of the message
+    if ($message->getCreateurMessageForum() !== $this->getUser()) {
+        return new JsonResponse(['error' => 'Unauthorized'], 403);
     }
 
-    // Get the new content from the request
-    $newContent = $request->request->get('content');
+    // Decode JSON content
+    $newContent = json_decode($request->getContent(), true)['content'] ?? null;
 
-    // Check if content is provided
     if (!$newContent) {
         return new JsonResponse(['error' => 'No content provided'], 400);
     }
 
-    // Update the message content
+    // Update the message
     $message->setConetenuIdMessageForum($newContent);
+    $message->setDateCreationIdMessageForum(new \DateTime()); // Update the timestamp
 
-    // Persist the changes to the database
     $em->flush();
 
-    // Return the updated message as a JSON response
-    return new JsonResponse(['updatedMessage' => $newContent]);
+    return new JsonResponse([
+        'success' => true,
+        'updatedMessage' => $newContent,
+        'messageId' => $message->getIdMessageForum(),
+    ]);
 }
-public function showForum(Request $request, Forum $forum): Response
+
+    
+
+#[Route('forum/{idForum}/new', name: 'app_message_forum_new', methods: ['GET', 'POST'])]
+public function newMessage(Request $request, EntityManagerInterface $entityManager, int $idForum, Security $security): Response
+{
+    $forum = $entityManager->getRepository(Forum::class)->find($idForum);
+
+    if (!$forum) {
+        throw $this->createNotFoundException('Forum not found.');
+    }
+
+    $message = new MessageForum();
+    $message->setForum($forum);
+
+    $user = $security->getUser();
+    if (!$user) {
+        throw $this->createAccessDeniedException('You must be logged in to post a message.');
+    }
+
+    $message->setCreateurMessageForum($user);
+    $message->setDateCreationIdMessageForum(new \DateTime('now'));
+
+    $form = $this->createForm(MessageForumType::class, $message);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($message);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_forum_front_show', ['idForum' => $forum->getIdForum()]);
+    }
+
+    return $this->render('forum/show2.html.twig', [
+        'form' => $form->createView(),
+        'forum' => $forum,
+    ]);
+    
+}
+
+/*public function showForum(Request $request, Forum $forum): Response
 {
     $search = $request->query->get('search', ''); // Get the 'search' parameter
     $messages = $this->getDoctrine()
@@ -243,7 +325,42 @@ public function showForum(Request $request, Forum $forum): Response
         'search' => $search,
         'messages' => $messages,
     ]);
+}*/
+
+
+/*
+
+    public function newMessage(Request $request, Forum $forum): Response
+    {
+        $content = $request->request->get('messageContent');
+        $user = $this->getUser();
+    
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+    
+        // Check if the content is provided
+        if (empty($content)) {
+            $this->addFlash('error', 'Message content cannot be empty.');
+            return $this->redirectToRoute('app_forum_front_show', ['idForum' => $forum->getIdForum()]);
+        }
+    
+        // Create a new MessageForum entity
+        $message = new MessageForum();
+        $message->setConetenuIdMessageForum($content); // Set content
+        $message->setCreateurMessageForum($user); // Set creator
+        $message->setForum($forum); // Set forum
+        $message->setDateCreationIdMessageForum(new \DateTime()); // Set creation date
+    
+        // Persist and flush the entity
+        $this->entityManager->persist($message);
+        $this->entityManager->flush();
+    
+        // Redirect back to the forum show route
+        return $this->redirectToRoute('app_forum_front_show', ['idForum' => $forum->getIdForum()]);
+    }
+    */
 }
 
-}
+
 

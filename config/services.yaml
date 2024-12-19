@@ -33,7 +33,8 @@ services:
             $adminEmail: '%env(ADMIN_EMAIL)%'
             $mailer: '@Symfony\Component\Mailer\MailerInterface'
                 # Explicit configuration for AchatController
-
+    App\Service\PanierService:
+        public: true
 
 
     # add more service definitions when explicit configuration is needed

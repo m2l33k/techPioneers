@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Abonnements{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 100px">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h1>Mes Événements Abonnés</h1>
+        </div>
+        <!-- Formulaire de recherche et filtrage -->
+        <form method="get" action="{{ path('app_user_subscriptions') }}">
+            <div class="form-row align-items-center mb-4">
+                <div class="col-md-3 mb-2">
+                    <input
+                            type="text"
+                            name="search"
+                            class="form-control"
+                            placeholder="Recherche par nom ou lieu"
+                            value="{{ search }}">
+                </div>
+                <div class="col-md-3 mb-2">
+                    <select name="filter" class="form-control" onchange="this.form.submit()">
+                        <option value="">-- Filtrer par type --</option>
+                        <option value="Workshop" {{ filter == 'Workshop' ? 'selected' : '' }}>Workshop</option>
+                        <option value="Hackathon" {{ filter == 'Hackathon' ? 'selected' : '' }}>Hackathon</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <select name="sort" class="form-control" onchange="this.form.submit()">
+                        <option value="date_desc" {{ sort == 'date_desc' ? 'selected' : '' }}>Date (Décroissante)</option>
+                        <option value="date_asc" {{ sort == 'date_asc' ? 'selected' : '' }}>Date (Croissante)</option>
+                        <option value="name_asc" {{ sort == 'name_asc' ? 'selected' : '' }}>Nom (A-Z)</option>
+                        <option value="name_desc" {{ sort == 'name_desc' ? 'selected' : '' }}>Nom (Z-A)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <button type="submit" class="btn btn-primary btn-block">Rechercher</button>
+                    <a href="{{ path('app_user_subscriptions') }}" class="btn btn-secondary btn-block">Réinitialiser</a>
+                </div>
+            </div>
+        </form>
+        <!-- Liste des événements sous forme de cartes -->
+        {% if events is not empty %}
+            <div class="row">
+                {% for event in events %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-lg border-light h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ event.event.eventName }}</h5>
+                                <p class="card-text"><strong>Lieu:</strong> {{ event.event.eventPlace }}</p>
+                                <p class="card-text"><strong>Date:</strong> {{ event.event.eventDate|date('d/m/Y') }}</p>
+                                <p class="card-text">{{ event.event.eventDesc | slice(0, 100) }}...</p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <!-- Boutons dans la card-footer -->
+                                <div class="btn-group">
+                                    <a href="{{ path('app_download_event_pdf', {'id': event.event.id}) }}" class="btn btn-info btn-sm">
+                                        Détails
+                                    </a>
+                                    {# <a href="{{ path('app_subscription_event.ticket', {'eventId': event.event.id}) }} " class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-download"></i> Télécharger Billet
+                                    </a> #}
+                                    <form method="post" action="{{ path('app_subscription_event.unsubscribe', {'id': event.id}) }} " style="display:inline;">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">cancel</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Vous n'êtes abonné à aucun événement.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Pagination" class="d-flex justify-content-center">
+        <ul class="pagination">
+            {% if page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path('app_user_subscriptions', {page: page - 1, search: search, filter: filter, sort: sort}) }}">Précédent</a>
+                </li>
+            {% endif %}
+
+            {% for i in 1..totalPages %}
+                <li class="page-item {{ page == i ? 'active' : '' }}">
+                    <a class="page-link" href="{{ path('app_user_subscriptions', {page: i, search: search, filter: filter, sort: sort}) }}">{{ i }}</a>
+                </li>
+            {% endfor %}
+
+            {% if page < totalPages %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path('app_user_subscriptions', {page: page + 1, search: search, filter: filter, sort: sort}) }}">Suivant</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <style>
+        .card-body {
+            padding-bottom: 1rem; /* Moins d'espace en bas de la carte */
+        }
+
+        .card-footer {
+            border-top: 1px solid #ddd;
+            background-color: #f8f9fa;
+            padding-top: 1rem;
+        }
+
+        .btn-group .btn {
+            margin-right: 5px; /* Marges plus petites entre les boutons */
+        }
+
+        .btn-outline-danger, .btn-outline-success, .btn-info {
+            font-size: 0.875rem; /* Taille de police plus petite */
+        }
+
+        .btn-outline-danger {
+            border-width: 1px; /* Réduit l'épaisseur des bordures */
+            color: #dc3545;
+            background-color: transparent;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .btn-outline-success {
+            border-width: 1px;
+            color: #28a745;
+            background-color: transparent;
+        }
+
+        .btn-outline-success:hover {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem; /* Ajuste de la taille pour des boutons plus petits */
+        }
+
+        .pagination .page-link {
+            font-size: 0.875rem; /* Taille de texte plus petite pour la pagination */
+        }
+    </style>
+
+{% endblock %}

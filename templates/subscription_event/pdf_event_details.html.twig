@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+
+    <style>
+        /* Corps de la page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff; /* Bleu ciel léger */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+
+        /* Titre de l'événement */
+        .event-title {
+            background: #87cefa; /* Bleu ciel */
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .event-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .event-title p {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        /* Carte de description de l'événement */
+        .card {
+            border-radius: 12px;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        /* Section des projets associés */
+        .projects-section {
+            margin-top: 40px;
+        }
+
+        .project-item {
+            background-color: #f0f8ff;
+            border: 2px solid #87cefa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .project-item:hover {
+            transform: translateY(-5px);
+            background-color: #e1efff;
+        }
+
+        .project-item .project-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1e90ff; /* Bleu plus foncé */
+        }
+
+        .project-item .project-desc {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Bouton de téléchargement du PDF */
+        .btn-pdf {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            background-color: #1e90ff;
+            color: white;
+            border-radius: 30px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-pdf:hover {
+            background-color: #4682b4;
+        }
+
+        .btn-pdf i {
+            margin-right: 10px;
+        }
+
+        /* Ajout d'une transition douce aux boutons */
+        .btn-pdf:focus, .btn-pdf:active {
+            outline: none;
+            background-color: #4682b4;
+        }
+
+        /* Responsivité */
+        @media (max-width: 767px) {
+            .event-title h1 {
+                font-size: 2rem;
+            }
+
+            .event-title p {
+                font-size: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+            }
+
+            .card-text {
+                font-size: 1rem;
+            }
+
+            .project-item {
+                padding: 15px;
+            }
+
+            .btn-pdf {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row mb-4">
+        <!-- Titre de l'événement -->
+        <div class="col-12">
+            <div class="event-title">
+                <h1>{{ event.eventName }}</h1>
+                <p>{{ event.eventPlace }} | {{ event.eventDate|date('d/m/Y') }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Carte Lieu -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Lieu</h5>
+                    <p class="card-text">{{ event.eventPlace }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte Date -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Date</h5>
+                    <p class="card-text">{{ event.eventDate|date('d/m/Y') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Carte Description -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Description</h5>
+                    <p class="card-text">{{ event.eventDesc }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Projets associés -->
+    {% if event.projets is not empty %}
+        <div class="projects-section">
+            <h3>Projets associés :</h3>
+            {% for project in event.projets %}
+                <div class="project-item">
+                    <div class="project-title">{{ project.title }}</div>
+                    <p class="project-desc">{{ project.projetdesc  }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+</div>
+
+</body>
+</html>

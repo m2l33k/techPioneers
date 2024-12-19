@@ -140,6 +140,9 @@ final class CoursController extends AbstractController
             'ressources' => $ressources,
         ]);
     }
-   
+   /**
+ * @ORM\Column(type="integer", nullable=true)
+ */
+private $idEnseignantCours;
    
 }

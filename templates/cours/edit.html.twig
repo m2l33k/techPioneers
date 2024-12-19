@@ -32,11 +32,7 @@
                             'attr': {'class': 'form-control mb-3'}
                         }) }}
                         
-                        {{ form_row(form.Id_Enseignant_Cours, {
-                            'label': 'ID Enseignant',
-                            'label_attr': {'class': 'form-label'},
-                            'attr': {'class': 'form-control mb-3'}
-                        }) }}
+                        {{ 'Teacher   :    ' ~ app.user.userIdentifier }}
                         
                         {{ form_row(form.Date_creation_Cours, {
                             'label': 'Date de création',

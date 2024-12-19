@@ -44,7 +44,7 @@ class ForumRepository extends ServiceEntityRepository
         
         // Filter by creator if provided
         if ($creatorId) {
-            $qb->andWhere('u.idUser = :creatorId')
+            $qb->andWhere('u.id = :creatorId')
                 ->setParameter('creatorId', $creatorId);
         }
         

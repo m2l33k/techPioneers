@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Événements{% endblock %}
+
+{% block body %}
+      <div class="container mt-5">
+        <h1 class="text-center text-primary mb-4">Liste des Événements</h1>
+
+        <form method="get" action="{{ path('app_subscription_event.read') }}" class="mb-4">
+            <div class="form-row align-items-center">
+                <div class="col-md-3 mb-2">
+                    <input
+                            type="text"
+                            name="search"
+                            class="form-control"
+                            placeholder="Recherche par nom ou lieu"
+                            value="{{ search }}"
+                    >
+                </div>
+                <div class="col-md-3 mb-2">
+                    <select name="filter" class="form-control" onchange="this.form.submit()">
+                        <option value="">-- Filtrer par type --</option>
+                        <option value="Workshop" {{ filter == 'Workshop' ? 'selected' : '' }}>Workshop</option>
+                        <option value="Hackathon" {{ filter == 'Hackathon' ? 'selected' : '' }}>Hackathon</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <select name="sort" class="form-control" onchange="this.form.submit()">
+                        <option value="">-- Trier par --</option>
+                        <option value="name_asc" {{ sort == 'name_asc' ? 'selected' : '' }}>Nom (A-Z)</option>
+                        <option value="name_desc" {{ sort == 'name_desc' ? 'selected' : '' }}>Nom (Z-A)</option>
+                        <option value="date_asc" {{ sort == 'date_asc' ? 'selected' : '' }}>Date (Croissante)</option>
+                        <option value="date_desc" {{ sort == 'date_desc' ? 'selected' : '' }}>Date (Décroissante)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <button type="submit" class="btn btn-primary btn-block">Rechercher</button>
+                    <a href="{{ path('app_subscription_event.read') }}" class="btn btn-secondary btn-block">Réinitialiser</a>
+                </div>
+            </div>
+        </form>
+
+        <!-- Liste des événements sous forme de cards -->
+        <div class="row">
+            {% for event in events %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ event.EventName }}</h5>
+                            <p class="card-text">
+                                <strong>Lieu :</strong> {{ event.EventPlace }}<br>
+                                <strong>Capacité :</strong> {{ event.capacite }}<br>
+                                <strong>Date :</strong> {{ event.EventDate|date('Y-m-d') }}
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent text-center">
+                            <div class="btn-group">
+                                <!-- Submit Button -->
+                                <a href="{{ path('app_subscription_event.subscribe', {'eventId': event.id}) }}" class="btn btn-primary btn-sm px-3" style="border-radius: 20px;">
+                                    <i class="fas fa-check-circle"></i> Submit
+                                </a>
+
+                                <!-- Details Button -->
+                                <a href="{{ path('app_events.detail', {'id': event.id}) }}" class="btn btn-outline-primary btn-sm px-3" style="border-radius: 20px;">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center text-muted">Aucun événement trouvé.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination" class="d-flex justify-content-center">
+            <ul class="pagination">
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_subscription_event.read', {page: page - 1, nbre: nbre, search: search, filter: filter}) }}">Précédent</a>
+                    </li>
+                {% endif %}
+                {% for i in 1..nbrePage %}
+                    <li class="page-item {{ page == i ? 'active' : '' }}">
+                        <a class="page-link" href="{{ path('app_subscription_event.read', {page: i, nbre: nbre, search: search, filter: filter}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {% if page < nbrePage %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_subscription_event.read', {page: page + 1, nbre: nbre, search: search, filter: filter}) }}">Suivant</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+
+
+
+
+
+
+{% endblock %}

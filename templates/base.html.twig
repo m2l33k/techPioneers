@@ -61,7 +61,9 @@
                 <a href="{{path('app_home')}}" class="nav-item nav-link active">Home</a>
                 <a href="{{path('app_about')}}" class="nav-item nav-link">About</a>
                <a href="{{path('app_cours_index2')}}" class="nav-item nav-link">Courses</a>
-               <a href="{{path('app_evenement_front')}}" class="nav-item nav-link">Evenement</a>
+               <a href="{{path('app_subscription_event.read')}}" class="nav-item nav-link">Evenement</a>
+               
+               {# <a href="{{path('app_events.read')}}" class="nav-item nav-link">app_events</a #}
                <a href="{{path('app_forum_front_index')}}" class="nav-item nav-link">Forum</a>
                <a href="{{path('chatbot_conversation')}}" class="nav-item nav-link">Chatbot</a>
 
@@ -81,14 +83,15 @@
                 
                 {% if app.user %}
             <!-- Affiche le bouton de déconnexion si l'utilisateur est connecté -->
-            <a href="{{ path('app_logout') }}" class="nav-item nav-link">Logout</a>
-          {% else %}
+                <a href="{{ path('app_logout') }}" class="nav-item nav-link">Logout         </a>
+                {% else %}
             <!-- Affiche le bouton de connexion si l'utilisateur n'est pas connecté -->
-            <a href="{{ path('app_login') }}" class="nav-item nav-link">Sign in</a>
-          {% endif %}
-            </div>
-            {# <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a> #}
+                <a href="{{ path('app_login') }}" class="nav-item nav-link">Sign in         </a>
+                {% endif %}
+          </div>
         </div>
+            {# <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a> #}
+      </div>
     </nav>
     <!-- Navbar End -->
 

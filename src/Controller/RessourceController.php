@@ -26,7 +26,7 @@ final class RessourceController extends AbstractController
       } else {
           $ressources = $ressourceRepository->findAll();  // Sinon, récupère toutes les ressources
       }
-      $this->denyAccessUnlessGranted('ROLE_TEACHER');
+    //  $this->denyAccessUnlessGranted('ROLE_TEACHER');
       return $this->render('ressource/index.html.twig', [
           'ressources' => $ressources,
       ]);

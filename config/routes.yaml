@@ -20,3 +20,27 @@ app_participation_list:
     path: /participation
     controller: App\Controller\ParticipationController::index
     methods: GET
+
+# config/routes.yaml
+app_panier:
+    path: /panier
+    controller: App\Controller\EvenementController::viewPanier
+
+app_panier_add:
+  path: /panier/add/{id}
+  controller: App\Controller\EvenementController::addToPanier
+  methods: [GET]
+app_evenement_show:
+    path: /evenement/{id}
+    controller: App\Controller\EvenementController::show
+
+
+app_panier_show:
+    path: /panier
+    controller: App\Controller\PanierController::showPanier
+
+app_panier_remove:
+    path: /panier/remove/{id}
+    controller: App\Controller\PanierController::removeFromPanier
+
+

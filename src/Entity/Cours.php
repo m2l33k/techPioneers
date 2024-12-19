@@ -20,8 +20,9 @@ class Cours
     #[ORM\Column(type: 'text')]
     private string $Descriptio_Cours;
 
-    #[ORM\Column]
-    private int $Id_Enseignant_Cours;
+    #[ORM\ManyToOne(targetEntity: Enseignant::class)]
+    #[ORM\JoinColumn(nullable: true)] // Allow null if the field is optional
+    private ?User $Id_Enseignant_Cours = null;
 
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $Date_creation_Cours;
@@ -71,6 +72,7 @@ class Cours
         $this->Id_Enseignant_Cours = $Id_Enseignant_Cours;
         return $this;
     }
+
 
     public function getDateCreationCours(): \DateTimeInterface
     {
