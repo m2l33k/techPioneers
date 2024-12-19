@@ -2,20 +2,70 @@
 
 {% block title %}Edit Message{% endblock %}
 
+{% block stylesheets %}
+<style>
+    /* General Card Styling */
+    .edit-message-card {
+        border-radius: 15px;
+        background-color: #f8f9fa;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Input and Textarea Styling */
+    .custom-input {
+        border-radius: 10px;
+        border: 1px solid #ced4da;
+        padding: 12px;
+        width: 100%;
+        font-size: 1rem;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .custom-input:focus {
+        border-color: #495057;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+
+    /* Button Styling */
+    .btn-outline-secondary {
+        border-radius: 10px;
+        font-size: 0.9rem;
+    }
+
+    .btn-danger {
+        border-radius: 10px;
+        font-size: 0.9rem;
+    }
+
+    /* Header Styling */
+    h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #333;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="container py-5">
     <h1 class="text-center mb-4">Edit Message</h1>
 
-    <div class="card shadow-lg p-4 edit-message-card">
+    <div class="card edit-message-card p-4">
+        <!-- Form Section -->
         <form class="custom-form" method="post">
             {{ include('message_forum/_form.html.twig', {'button_label': 'Update'}) }}
         </form>
 
+        <!-- Action Buttons -->
         <div class="d-flex justify-content-between align-items-center mt-4">
             <a href="{{ path('app_message_forum_index') }}" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>
-            {{ include('message_forum/_delete_form.html.twig', {'button_class': 'btn btn-danger', 'message': message_forum}) }}
+            {{ include('message_forum/_delete_form.html.twig', {
+                'button_class': 'btn btn-danger', 
+                'message': message_forum
+            }) }}
         </div>
     </div>
 </div>

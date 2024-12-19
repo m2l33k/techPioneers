@@ -44,3 +44,5 @@ app_panier_remove:
     controller: App\Controller\PanierController::removeFromPanier
 
 
+  
+

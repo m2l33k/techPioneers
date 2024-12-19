@@ -22,8 +22,16 @@ class MessageForumType extends AbstractType
    $builder
    ->add('ConetenuIdMessageForum', TextareaType::class, [
        'label' => 'Type Your Message',
-       'required' => true,  // You can add validation here
-   ]);
+       'required' => true,
+       'attr' => [
+                'class' => 'custom-input', // Add a custom class for styling
+                'rows' => 5, // Adjust textarea size if necessary
+            ],
+            'row_attr' => [
+                'class' => 'form-group', // Add a wrapper class
+            ],
+        ]);  
+ 
 
         
 }

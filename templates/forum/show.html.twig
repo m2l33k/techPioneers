@@ -36,8 +36,7 @@
           {% for message in forum.messages %}
             <div class="chat-message mb-3">
                 <div class="d-flex align-items-start">
-                    <img src="{{ asset(message.CreateurMessageForum.photoUser ? message.CreateurMessageForum.photoUser : 'img/userIcon.png') }}" 
-                         alt="{{ message.CreateurMessageForum.username }}" class="user-avatar mr-4">
+                    
                     <div class="message-content">
                         <div class="chat-author">
                             <strong>{{ message.CreateurMessageForum.username }}</strong>
@@ -63,19 +62,7 @@
           {% endfor %}
         </div>
 
-          <div class="message-input">
-            <form action="{{ path('app_message_forum_new', {'idForum': forum.idForum}) }}" method="post" enctype="multipart/form-data" class="message-form">
-                <textarea id="messageContent" name="messageContent" class="form-control message-input" placeholder="Type your message..." required></textarea>
-                <div class="input-group mt-3">
-                    <label for="fileInput" class="btn btn-outline-primary file-label">
-                        <i class="fas fa-paperclip"></i> Choose Files
-                    </label>
-                    <input type="file" name="messageFile[]" class="form-control file-input" id="fileInput" multiple style="display:none;">
-                    <button type="submit" class="btn btn-send">
-                        <i class="fas fa-paper-plane"></i> Send
-                    </button>
-                </div>
-            </form>
+          
     </div>
     </div>
 </div>
