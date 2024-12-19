@@ -32,16 +32,10 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            if ($user->getRoles("ROLE_ADMIN")) {
-              return $this->redirectToRoute('Dashboard.html.twig');
-          } elseif ($user->getRoles("ROLE_TEACHER")) {
-              return $this->redirectToRoute('Dashboard1.html.twig');
-          } elseif ($user->getRoles("ROLE_STUDENT")) {
-              return $this->redirectToRoute('STUDENT.html.twig');
-          } else {
+            
               // Default redirect or error handling
               return $this->redirectToRoute('Welcome');
-          } // Redirect to a desired route
+           // Redirect to a desired route
         }
 
         return $this->render('registration/register.html.twig', [
